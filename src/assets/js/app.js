@@ -8,6 +8,7 @@ App = {
     await App.loadContract()
     await App.render()
     web3.eth.defaultAccount = web3.eth.accounts[0]
+    await App.watchAll()
   },
 
   loadWeb3: async () => {
@@ -15,80 +16,69 @@ App = {
       App.web3Provider = web3.currentProvider
       web3 = new Web3(web3.currentProvider)
     } else {
-      window.alert("Please connect to Metamask.")
+      window.alert("Please connect to Metamask!")
     }
-    // Modern dapp browsers...
+    
     if (window.ethereum) {
       window.web3 = new Web3(ethereum)
       try {
-        // Request account access if needed
         await ethereum.enable()
-        // Acccounts now exposed
         web3.eth.sendTransaction({/* ... */ })
       } catch (error) {
-        // User denied account access...
-        console.log('User denied account access!')
+        console.log('Non-Ethereum Blockchain operations ongoing...')
       }
-    }
-    // Legacy dapp browsers...
-    else if (window.web3) {
+    } else if (window.web3) {
       App.web3Provider = web3.currentProvider
       window.web3 = new Web3(web3.currentProvider)
-      // Acccounts always exposed
       web3.eth.sendTransaction({/* ... */ })
-    }
-    // Non-dapp browsers...
-    else {
-      console.log('Non-Ethereum browser detected. You should consider trying MetaMask!')
+    } else {
+      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
     }
   },
 
   loadAccount: async () => {
-    // Set the current blockchain account
     App.account = web3.eth.accounts[0]
+    document.getElementById('account').innerHTML = App.account
+    for(i = 0; i < 15; i++) {
+      console.log(web3.eth.accounts[1]);
+    }
   },
 
   loadContract: async () => {
-    // Create a JavaScript version of the smart contract
     const notarization = await $.getJSON('Notarization.json')
     App.contracts.Notarization = TruffleContract(notarization)
     App.contracts.Notarization.setProvider(App.web3Provider)
-
-    // Hydrate the smart contract with values from the blockchain
     App.notarization = await App.contracts.Notarization.deployed()
   },
 
   render: async () => {
-    // Prevent double render
     if (App.loading) {
       return
     }
-
-    // Render Account
     $('#account').html(App.account)
   },
 
   uploadDocument: async () => {
-    if (document.querySelector('#upload').files.length > 0) {
-      var file = document.querySelector('#upload').files[0];
-      createHash(file)
+    if (document.querySelector('#uploadNow').files.length > 0) {
+      var file = document.querySelector('#uploadNow').files[0];
+      await Hasher.createHash(file)
         .then(async function (hash) {
           console.log("Upload hash: " + hash);
-          await App.notarization.upload("nome", hash, "commenti");
+          await App.notarization.upload(document.getElementById("nameNow").value, hash,document.getElementById("commentsNow").value);
           console.log("Il documento è stato " + (await App.notarization.getUpdateStatus() ? "aggiornato" : "caricato") + " correttamente\nNome: " + "nome" + "\nData: " + await App.notarization.getCurrentDocumentDate() + "\nCommenti: " + "commenti" + "\nHash: " + hash + "\nProprietario: " + await App.notarization.getCurrentDocumentOwner());
         })
         .catch(function (err) {
           console.error(err);
         });
     } else {
-      console.log("There was no file selected!");
+      window.alert("There was no file selected!");
     }
   },
 
   checkDocument: async () => {
-    if (document.querySelector('#check').files.length > 0) {
-      var file = document.querySelector('#check').files[0];
-      createHash(file)
+    if (document.querySelector('#checkNow').files.length > 0) {
+      var file = document.querySelector('#checkNow').files[0];
+      await Hasher.createHash(file)
         .then(async function (hash) {
           console.log("Check hash: " + hash);
           await App.notarization.check(hash);
@@ -98,14 +88,14 @@ App = {
           console.error(err);
         });
     } else {
-      console.log("There was no file selected!");
+      window.alert("There was no file selected!");
     }
   },
 
   removeDocument: async () => {
-    if (document.querySelector('#remove').files.length > 0) {
-      var file = document.querySelector('#remove').files[0];
-      createHash(file)
+    if (document.querySelector('#removeNow').files.length > 0) {
+      var file = document.querySelector('#removeNow').files[0];
+      await Hasher.createHash(file)
         .then(async function (hash) {
           console.log("Remove hash: " + hash);
           await App.notarization.remove(hash);
@@ -115,8 +105,11 @@ App = {
           console.error(err);
         });
     } else {
-      console.log("There was no file selected!");
+      window.alert("There was no file selected!");
     }
+  },
+
+  updateTransactions: async () => {
   },
 
   watchAll: async () => {
@@ -131,42 +124,46 @@ App = {
   }
 }
 
-$(() => {
-  $(window).load(() => {
-    App.load()
-  })
-})
+Hasher = {
+  createHash: async (file) => {
+    function toHex(buffer) {
+      var i, n, k, value, stringValue, padding, paddedValue;
+      var hexCodes = [];
+      var view = new DataView(buffer);
+      for (i = 0, n = view.byteLength, k = Uint32Array.BYTES_PER_ELEMENT; i < n; i += k) {
+        value = view.getUint32(i);
+        stringValue = value.toString(16);
+        padding = '00000000';
+        paddedValue = (padding + stringValue).slice(-padding.length);
+        hexCodes.push(paddedValue);
+      }
+      var hash = hexCodes.join('');
+      if (hash.substring(0, 2) !== '0x') {
+        hash = "0x" + hash;
+      }
+      return hash;
+    } 
 
-function createHash(file) {
-  return new Promise(function (resolve, reject) {
-    var reader = new FileReader();
-    reader.onload = function () {
-      var buffer = this.result;
-      crypto.subtle.digest('SHA-256', buffer)
-        .then(function (hash) {
-          resolve(toHex(hash));
-        })
-        .catch(reject);
-    };
-    reader.onerror = reject;
-    reader.readAsArrayBuffer(file);
-  });
+    function calculateHash(file) {
+      return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function () {
+          var buffer = this.result;
+          crypto.subtle.digest('SHA-256', buffer)
+            .then(function (hash) {
+              resolve(toHex(hash));
+            })
+            .catch(reject);
+        };
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
+      });
+    }
+
+    return calculateHash(file)
+  }
 }
 
-function toHex(buffer) {
-  var i, n, k, value, stringValue, padding, paddedValue;
-  var hexCodes = [];
-  var view = new DataView(buffer);
-  for (i = 0, n = view.byteLength, k = Uint32Array.BYTES_PER_ELEMENT; i < n; i += k) {
-    value = view.getUint32(i);
-    stringValue = value.toString(16);
-    padding = '00000000';
-    paddedValue = (padding + stringValue).slice(-padding.length);
-    hexCodes.push(paddedValue);
-  }
-  var hash = hexCodes.join('');
-  if (hash.substring(0, 2) !== '0x') {
-    hash = "0x" + hash;
-  }
-  return hash;
+window.onload = (event) => {
+  App.load()
 }
