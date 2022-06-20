@@ -1,24 +1,19 @@
 {
-    "name": "blockchain-notarization-dapp",
-    "version": "11.0.0",
-    "description": "Blockchain Notarization dApp",
-    "main": "truffle-config.js",
-    "directories": {
-      "test": "test"
-    },
-    "scripts": {
-      "dev": "lite-server",
-      "test": "echo \"Error: no test specified\" && sexit 1"
-    },
-    "author": "Adnan Latif Gazi",
-    "license": "ISC",
-    "devDependencies": {
-      "bootstrap": "4.1.3",
-      "lite-server": "^2.3.0",
-      "nodemon": "^1.17.3",
-      "truffle": "5.0.2",
-      "truffle-contract": "3.0.6",
-      "web3": "^0.20.6"
-    }
+  "name":"alpha-dapp",
+  "version":"1.15.0",
+  "description":"Blockchain Notarization dApp",
+  "author":"Adnan Latif Gazi",
+  "license":"MIT",
+  "main":"truffle-config.js",
+  "directories":{
+    "test":"test"
+  },
+  "scripts":{
+    "dev":"lite-server"
+  },
+  "devDependencies":{
+    "truffle":"5.0.2",
+    "truffle-contract":"3.0.6",
+    "web3":"^0.20.6"
   }
-  
+}

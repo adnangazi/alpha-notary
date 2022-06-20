@@ -1403,27 +1403,28 @@ a {
 /*----------------------------------------------------*/
 @import url('https://fonts.googleapis.com/css?family=Space+Mono:400,400i,700,700i');
 .card {
-	width: 350px;
-	height: 200px;
+	width: 500px;
+	height: 300px;
+  margin: auto;
 	-webkit-perspective: 600px;
 	-moz-perspective: 600px;
 	perspective: 600px;
   border: none;
 }
 .card__part {
-	box-shadow: 1px 1px #aaa3a3;
+  box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
 	top: 0;
 	position: absolute;
 	z-index: 1000;
 	left: 0;
 	display: inline-block;
-	width: 350px;
-	height: 200px;
+	width: 500px;
+	height: 300px;
 	background-image: url('../img/card/bg.jfif');
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
-	border-radius: 8px;
+	border-radius: 5px;
 	-webkit-transition: all .3s ease-in-out;
 	-moz-transition: all 0.3s ease-in-out;
 	-ms-transition: all 0.3s ease-in-out;
@@ -1469,8 +1470,8 @@ a {
 	letter-spacing: 2px;
 	color: #fff;
 	text-align: center;
-	margin-bottom: 15px;
-	margin-top: 5px;
+	margin-bottom: 25px;
+	margin-top: 10px;
 }
 .card__space-75 {
 	width: 75%;
@@ -1506,8 +1507,8 @@ a {
 	color: #fff;
 	text-align: center;
 	font-size: 12px;
-	margin-top: 15px;
-	margin-bottom: 5px;
+	margin-top: 25px;
+	margin-bottom: 15px;
 }
 .card__secret {
 	padding: 5px 12px;

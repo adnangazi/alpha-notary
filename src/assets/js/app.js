@@ -11,6 +11,9 @@ App = {
     await App.watchAll()
   },
 
+  connection: async () => {
+  },
+
   loadWeb3: async () => {
     if (typeof web3 !== 'undefined') {
       App.web3Provider = web3.currentProvider
@@ -39,9 +42,6 @@ App = {
   loadAccount: async () => {
     App.account = web3.eth.accounts[0]
     document.getElementById('account').innerHTML = App.account
-    for(i = 0; i < 15; i++) {
-      console.log(web3.eth.accounts[1]);
-    }
   },
 
   loadContract: async () => {
