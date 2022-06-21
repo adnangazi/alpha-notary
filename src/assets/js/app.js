@@ -42,6 +42,13 @@ App = {
   loadAccount: async () => {
     App.account = web3.eth.accounts[0]
     document.getElementById('account').innerHTML = App.account
+    await web3.eth.getBalance(App.account, function(error, result){ 
+      if(!error) {
+        const walletValue = parseInt(result, 10) / 10 ** 18
+        document.getElementById('walletBase').innerHTML = walletValue + " Coin" + (walletValue != 1 && walletValue != 0 ? "s" : "")
+      } else 
+        console.error(error); 
+    })
   },
 
   loadContract: async () => {

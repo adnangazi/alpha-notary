@@ -57,7 +57,7 @@
 					</div>
 				</div>
 			</section>
-			<section class="breadcrumbs" data-aos="fade-up">
+			<section class="breadcrumbs" data-aos="fade-down">
 				<div class="container">
 					<ol>
 						<li data-aos="fade-up" data-aos-delay="50"><a href="index.html">Home</a></li>
@@ -73,29 +73,37 @@
 				</header>
 				<div class="container">
 					<div class="row gx-0">
-                  <div class="col-lg-6 d-flex align-items-center crossBackgroundLeft" data-aos="zoom-out" data-aos-delay="400">
+                  <div class="col-lg-6 d-flex align-items-center crossBackgroundLeft bottomSpace" data-aos="zoom-out" data-aos-delay="400">
                      <div class="card floating">
                         <div class="card__front card__part">
                            <img class="card__front-square card__square" src="assets/img/card/chip.png">
                            <img class="card__front-logo card__logo" src="assets/img/card/coin.png">
-                           <p class="title">User Wallet</p>
-                           <p class="card_numer">**** **** **** 6258</p>
+						   <p class="title" id="accountID">Account ID</p>
+						   <p class="card__secret--last" id="account"></p>
                            <div class="card__space-75">
-                              <span class="card__label">Network</span>
-                              <p class="card__info">Ethereum</p>
+                              <span class="card__label" id="network">Network</span>
+                              <p class="card__info" id="ethereum">Ethereum</p>
                            </div>
                            <div class="card__space-25">
-                              <span class="card__label">Provider</span>
-                              <p class="card__info">Infura</p>
+                              <span class="card__label" id="dapp">dApp</span>
+                              <p class="card__info" id="alphadapp">AlphaDApp</p>
                            </div>
                         </div>
                         <div class="card__back card__part">
                            <div class="card__black-line"></div>
                            <div class="card__back-content">
                               <div class="card__secret">
-                                 <p class="title">Account ID</p>
-                                 <p class="card__secret--last" id="account"></p>
+                                 <p class="title" id="wallet">Wallet Base</p>
+                                 <p class="card__secret--last" id="walletBase"></p>
                               </div>
+							  <div class="card__space-75 paddingLeft">
+								 <span class="card__label" id="connector">Connector</span>
+								 <p class="card__info" id="metamask">MetaMask</p>
+							  </div>
+							  <div class="card__space-25 paddingRight">
+								 <span class="card__label" id="provider">Provider</span>
+								 <p class="card__info" id="infura">Infura</p>
+							  </div>
                               <img class="card__back-square card__square" src="assets/img/card/chip.png">
                               <img class="card__back-logo card__logo" src="assets/img/card/coin.png">
                            </div>

@@ -68,7 +68,7 @@ section {
 }
 @media (max-width: 992px) {
   .breadcrumbs {
-    margin-top: 57px;
+    margin-bottom: 57px;
   }
 }
 .breadcrumbs h2 {
@@ -1403,11 +1403,10 @@ a {
 /*----------------------------------------------------*/
 @import url('https://fonts.googleapis.com/css?family=Space+Mono:400,400i,700,700i');
 .card {
-	width: 500px;
-	height: 300px;
+	width: 450px;
+	height: 275px;
   margin: auto;
-	-webkit-perspective: 600px;
-	-moz-perspective: 600px;
+  background-color: transparent;
 	perspective: 600px;
   border: none;
 }
@@ -1418,37 +1417,28 @@ a {
 	z-index: 1000;
 	left: 0;
 	display: inline-block;
-	width: 500px;
-	height: 300px;
+	width: 450px;
+	height: 275px;
 	background-image: url('../img/card/bg.jfif');
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
 	border-radius: 5px;
-	-webkit-transition: all .3s ease-in-out;
-	-moz-transition: all 0.3s ease-in-out;
-	-ms-transition: all 0.3s ease-in-out;
-	-o-transition: all 0.3s ease-in-out;
-	transition: all 0.3s ease-in-out;
-	-webkit-transform-style: preserve-3d;
-	-moz-transform-style: preserve-3d;
-	-webkit-backface-visibility: hidden;
-	-moz-backface-visibility: hidden;
+	transition: all .5s ease-in-out;
+	backface-visibility: hidden;
 }
 .card__front {
 	padding: 18px;
-	-webkit-transform: rotateY(0);
-	-moz-transform: rotateY(0);
+	transform: rotateY(0);
 }
 .card__back {
 	padding: 18px 0;
-	-webkit-transform: rotateY(-180deg);
-	-moz-transform: rotateY(-180deg);
+	transform: rotateY(-180deg);
 }
 .card__black-line {
 	margin-top: 5px;
 	height: 38px;
-	background-color: #303030;
+	background-color: #eec703;
 }
 .card__logo {
 	height: 16px;
@@ -1462,23 +1452,12 @@ a {
 	border-radius: 5px;
 	height: 30px;
 }
-.card_numer {
-	display: block;
-	width: 100%;
-	word-spacing: 4px;
-	font-size: 20px;
-	letter-spacing: 2px;
-	color: #fff;
-	text-align: center;
-	margin-bottom: 25px;
-	margin-top: 10px;
-}
 .card__space-75 {
-	width: 75%;
+	width: 65%;
 	float: left;
 }
 .card__space-25 {
-	width: 25%;
+	width: 35%;
 	text-align: right;
 	float: left;
 }
@@ -1489,10 +1468,6 @@ a {
 	letter-spacing: 1px;
 }
 .card__info {
-	margin-bottom: 0;
-	margin-top: 5px;
-	font-size: 16px;
-	line-height: 18px;
 	color: #fff;
 	letter-spacing: 1px;
 	text-transform: uppercase;
@@ -1500,15 +1475,10 @@ a {
 .card__secret--last {
 	color: #fff;
 	text-align: center;
-	margin: 0;
-	font-size: 16px;
 }
 .title {
 	color: #fff;
 	text-align: center;
-	font-size: 12px;
-	margin-top: 25px;
-	margin-bottom: 15px;
 }
 .card__secret {
 	padding: 5px 12px;
@@ -1525,10 +1495,41 @@ a {
 	left: 15px;
 }
 .card:hover .card__front {
-	-webkit-transform: rotateY(180deg);
-	-moz-transform: rotateY(180deg);
+	transform: rotateY(180deg);
 }
 .card:hover .card__back {
-	-webkit-transform: rotateY(0deg);
-	-moz-transform: rotateY(0deg);
+	transform: rotateY(0deg);
+}
+.paddingLeft {
+  padding-left: 18px;
+}
+.paddingRight {
+  padding-right: 18px;
+}
+.card .card_info p {
+  margin: 10px 0 0 0;
+}
+#accountID {
+  margin: 30px 0 0 0;
+  font-size: 15px;
+}
+#account {
+  margin: 10px 60px 40px 60px;
+  font-size: 24px;
+}
+#network, #dapp {
+  margin: 0;
+  font-size: 15px;
+}
+#ethereum, #alphadapp, #metamask, #infura {
+  margin: 0;
+  font-size: 20px;
+}
+#wallet {
+  margin: 30px 0 0 0;
+  font-size: 15px;
+}
+#walletBase {
+  margin: 10px 0 20px 0;
+  font-size: 24px;
 }
