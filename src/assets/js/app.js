@@ -171,6 +171,76 @@ Hasher = {
   }
 }
 
-window.onload = (event) => {
+Utils = {
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+}
+
+FileUploader = {
+  form: document.querySelector(".form"),
+  dragText: document.querySelector(".messageDD"),
+  fileInput: document.querySelector(".file-input"),
+  progressArea: document.querySelector(".progress-area"),
+  uploadedArea: document.querySelector(".uploaded-area"),
+
+  eventLoader: async () => {
+    FileUploader.form.addEventListener("click", () => {
+      FileUploader.fileInput.click();
+    });
+    
+    FileUploader.fileInput.onchange = ({target}) => {
+      let file = target.files[0];
+      FileUploader.animationUploading(file);
+    }
+    
+    FileUploader.form.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      FileUploader.form.classList.add("activeForm");
+      FileUploader.dragText.innerHTML = "Release to Upload File";
+    });
+    
+    
+    FileUploader.form.addEventListener("dragleave", () => {
+      FileUploader.closeDrag();
+    });
+    
+    
+    FileUploader.form.addEventListener("drop", (event) => {
+      event.preventDefault();
+      let file = event.dataTransfer.files[0];
+      FileUploader.animationUploading(file);
+      FileUploader.closeDrag();
+    });
+  },
+
+  closeDrag: async () => {
+    FileUploader.form.classList.remove("activeForm");
+    FileUploader.dragText.innerHTML = "Browse or drag &amp; drop";
+  },
+
+  animationUploading: async (file) => {
+    for (let i = 1; i <= 100; i++) {
+      Utils.sleep(i * 20).then(() => {
+        FileUploader.progressArea.innerHTML = '<li class="row"><i class="fas fa-file-alt"></i><div class="content"><div class="details"><span class="name">' + file.name + ' - uploading</span><span class="percent">' + i + '%</span></div><div class="progress-bar"><div class="progress" style="width:' + i + '%"></div></div></div></li>';
+      });
+    }
+    let dim = "";
+    let size = file.size / 1024;
+    if (size <= 1024) {
+      dim = size + "KB";
+    } else {
+      size /= 1024;
+      dim = size + "MB";
+    }
+    Utils.sleep(2200).then(() => {
+      FileUploader.uploadedArea.innerHTML += '<li class="row"><div class="content"><i class="fas fa-file-alt"></i><div class="details"><span class="name">' + file.name + ' - uploaded</span><span class="size">' + dim + '</span></div></div><i class="fas fa-check"></i></li>';
+      FileUploader.progressArea.innerHTML = '';
+    });
+  }
+}
+
+window.onload = () => {
   App.load()
+  FileUploader.eventLoader();
 }

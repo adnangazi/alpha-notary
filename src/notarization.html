@@ -7,6 +7,7 @@
 		<meta content="Manage NFTs uniquely yours, by uploading documents, checking their authenticity, and removing them when you want! Monitor the correctness of your transactions as well! Notarization is solid, practical, and safe thanks to AlphaDApp! Start right now and enjoy a completely new era of NFTs!" name="description">
 		<link href="assets/img/icon/alpha-3.png" rel="icon">
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 		<link href="assets/vendor/aos/aos.css" rel="stylesheet">
 		<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		<link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
@@ -24,19 +25,31 @@
 				</div>
 				<nav id="navbar" class="navbar">
 					<ul>
-						<li data-aos="fade-down" data-aos-delay="100"><a class="nav-link scrollto" href="#wallet">Wallet</a></li>
-						<li data-aos="fade-down" data-aos-delay="150"><a class="nav-link scrollto" href="#upload">Upload</a></li>
-						<li data-aos="fade-down" data-aos-delay="200"><a class="nav-link scrollto" href="#check">Check</a></li>
-						<li data-aos="fade-down" data-aos-delay="250"><a class="nav-link scrollto" href="#remove">Remove</a></li>
-						<li data-aos="fade-down" data-aos-delay="300"><a class="nav-link scrollto" href="#monitoring">Monitoring</a></li>
-						<li class="getStartedLi" data-aos="fade-down" data-aos-delay="350"><a class="getstarted" href="index.html">Home</a></li>
+						<li data-aos="fade-down" class="toggleCheck" data-aos-delay="100">
+							<label class="switch" id="darkMode">
+								<input type="checkbox">
+								<span class="slider round"></span>
+							</label>
+						</li>
+						<li data-aos="fade-down" class="toggleCheck inverted" data-aos-delay="150">
+							<label class="switch" id="liteMode">
+								<input type="checkbox">
+								<span class="slider round"></span>
+							</label>
+						</li>
+						<li data-aos="fade-down" data-aos-delay="200"><a class="nav-link scrollto" href="#wallet">Wallet</a></li>
+						<li data-aos="fade-down" data-aos-delay="250"><a class="nav-link scrollto" href="#upload">Upload</a></li>
+						<li data-aos="fade-down" data-aos-delay="300"><a class="nav-link scrollto" href="#check">Check</a></li>
+						<li data-aos="fade-down" data-aos-delay="350"><a class="nav-link scrollto" href="#remove">Remove</a></li>
+						<li data-aos="fade-down" data-aos-delay="400"><a class="nav-link scrollto" href="#monitoring">Monitoring</a></li>
+						<li class="getStartedLi" data-aos="fade-down" data-aos-delay="450"><a class="getstarted" href="index.html">Home</a></li>
 					</ul>
 					<i class="bi bi-list mobile-nav-toggle"></i>
 				</nav>
 			</div>
 		</header>
 		<main>
-			<section class="hero d-flex align-items-center" data-aos="fade-down">
+			<section class="hero notarization d-flex align-items-center" data-aos="fade-down">
 				<div class="container">
 					<div class="row">
 						<div class="col-lg-6 d-flex flex-column justify-content-center">
@@ -57,7 +70,7 @@
 					</div>
 				</div>
 			</section>
-			<section class="breadcrumbs" data-aos="fade-down">
+			<section class="breadcrumbs notarization" data-aos="fade-down">
 				<div class="container">
 					<ol>
 						<li data-aos="fade-up" data-aos-delay="50"><a href="index.html">Home</a></li>
@@ -73,43 +86,43 @@
 				</header>
 				<div class="container">
 					<div class="row gx-0">
-                  <div class="col-lg-6 d-flex align-items-center crossBackgroundLeft bottomSpace" data-aos="zoom-out" data-aos-delay="400">
-                     <div class="card floating">
-                        <div class="card__front card__part">
-                           <img class="card__front-square card__square" src="assets/img/card/chip.png">
-                           <img class="card__front-logo card__logo" src="assets/img/card/coin.png">
-						   <p class="title" id="accountID">Account ID</p>
-						   <p class="card__secret--last" id="account"></p>
-                           <div class="card__space-75">
-                              <span class="card__label" id="network">Network</span>
-                              <p class="card__info" id="ethereum">Ethereum</p>
-                           </div>
-                           <div class="card__space-25">
-                              <span class="card__label" id="dapp">dApp</span>
-                              <p class="card__info" id="alphadapp">AlphaDApp</p>
-                           </div>
-                        </div>
-                        <div class="card__back card__part">
-                           <div class="card__black-line"></div>
-                           <div class="card__back-content">
-                              <div class="card__secret">
-                                 <p class="title" id="wallet">Wallet Base</p>
-                                 <p class="card__secret--last" id="walletBase"></p>
-                              </div>
-							  <div class="card__space-75 paddingLeft">
-								 <span class="card__label" id="connector">Connector</span>
-								 <p class="card__info" id="metamask">MetaMask</p>
-							  </div>
-							  <div class="card__space-25 paddingRight">
-								 <span class="card__label" id="provider">Provider</span>
-								 <p class="card__info" id="infura">Infura</p>
-							  </div>
-                              <img class="card__back-square card__square" src="assets/img/card/chip.png">
-                              <img class="card__back-logo card__logo" src="assets/img/card/coin.png">
-                           </div>
-                        </div>
-                     </div>
-                  </div>
+                  		<div class="col-lg-6 d-flex align-items-center crossBackgroundLeft bottomSpace" data-aos="zoom-out" data-aos-delay="400">
+							<div class="card floating">
+								<div class="card__front card__part">
+									<img data-aos="zoom-out" data-aos-delay="450" class="card__front-square card__square" src="assets/img/card/chip.png">
+									<img data-aos="zoom-out" data-aos-delay="500" class="card__front-logo card__logo" src="assets/img/card/coin.png">
+									<p data-aos="zoom-out" data-aos-delay="450" class="title" id="accountID">Account ID</p>
+									<p data-aos="zoom-out" data-aos-delay="500" class="card__secret--last" id="account"></p>
+									<div class="card__space-75">
+										<span data-aos="zoom-out" data-aos-delay="500" class="card__label" id="network">Network</span>
+										<p data-aos="zoom-out" data-aos-delay="550" class="card__info" id="ethereum">Ethereum</p>
+									</div>
+									<div class="card__space-25">
+										<span data-aos="zoom-out" data-aos-delay="550" class="card__label" id="dapp">dApp</span>
+										<p data-aos="zoom-out" data-aos-delay="600" class="card__info" id="alphadapp">AlphaDApp</p>
+									</div>
+								</div>
+								<div class="card__back card__part">
+								<div class="card__black-line"></div>
+								<div class="card__back-content">
+									<div class="card__secret">
+										<p class="title" id="wallet">Wallet Base</p>
+										<p class="card__secret--last" id="walletBase"></p>
+									</div>
+									<div class="card__space-75 paddingLeft">
+										<span class="card__label" id="connector">Connector</span>
+										<p class="card__info" id="metamask">MetaMask</p>
+									</div>
+									<div class="card__space-25 paddingRight">
+										<span class="card__label" id="provider">Provider</span>
+										<p class="card__info" id="infura">Infura</p>
+									</div>
+									<img class="card__back-square card__square" src="assets/img/card/chip.png">
+									<img class="card__back-logo card__logo" src="assets/img/card/coin.png">
+								</div>
+								</div>
+							</div>
+                  		</div>
 						<div class=" col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
 							<div class="content">
 								<h3 data-aos="fade-up" data-aos-delay="250">What is AlphaDApp?</h3>
@@ -133,7 +146,7 @@
 				</header>
 				<div class="container">
 					<div class="row gx-0">
-						<div class=" col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+						<div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
 							<div class="content">
 								<h3 data-aos="fade-up" data-aos-delay="250">What is AlphaDApp?</h3>
 								<h2 data-aos="fade-up" data-aos-delay="300">AlphaDApp is a decentralized application which runs thanks to Smart Contracts over the Blockchain.</h2>
@@ -146,16 +159,34 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-6 d-flex align-items-center crossBackgroundRight" data-aos="zoom-out" data-aos-delay="400">
+						<div class="col-lg-6 d-flex align-items-center crossBackgroundRight upperSpace" data-aos="zoom-out" data-aos-delay="400">
 							<img src="assets/img/material/vectorial/about-img.svg" class="img-fluid antiFloating bottomSpace">
 						</div>
 					</div>
 				</div>
+				<div class="wrapper bigForm row gx-0" data-aos="fade-up">
+					<div class="col-lg-6 d-flex flex-column">
+						<h2 data-aos="fade-up" data-aos-delay="50">Upload your files here</h2>
+						<div class="form" data-aos="fade-up" data-aos-delay="100">
+							<input class="file-input" type="file" name="file" hidden>
+							<i class="fas fa-cloud-upload-alt" data-aos="fade-up" data-aos-delay="150"></i>
+							<p class="messageDD" data-aos="fade-up" data-aos-delay="200">Browse or drag &amp; drop</p>
+						</div>
+						<div class="progress-area">
+						</div>
+						<div class="uploaded-area">
+						</div>
+					</div>
+					<div class="col-lg-6 d-flex flex-column rightForm">
+						<h2 data-aos="fade-up" data-aos-delay="100">Insert your files info here</h2>
+						<label data-aos="fade-up" data-aos-delay="150">Document name</label>
+						<input data-aos="fade-up" data-aos-delay="200" type="text" placeholder="Subject" required>
+						<label data-aos="fade-up" data-aos-delay="250">Document comments</label>
+						<textarea data-aos="fade-up" data-aos-delay="300" cols="30" rows="7" placeholder="Message"></textarea>
+						<button data-aos="fade-up" data-aos-delay="350" type="button" class="formButton" onclick="App.checkDocument()">Check</button>
+					</div>
+				</div>
 			</section>
-			<form action="" enctype="multipart/form-data">
-				<input id="uploadNow" type="file" />
-				<button type="button" onclick="App.uploadDocument()">Upload</button>
-			</form>
 			<section id="check" class="about">
 				<header id="section-header">
 					<h2 data-aos="fade-up">Check</h2>
@@ -181,11 +212,20 @@
 						</div>
 					</div>
 				</div>
+				<div class="wrapper" data-aos="fade-up">
+					<h2 data-aos="fade-up" data-aos-delay="50">Upload your files here</h2>
+					<div class="form" data-aos="fade-up" data-aos-delay="100">
+						<input class="file-input" type="file" name="file" hidden>
+						<i class="fas fa-cloud-upload-alt" data-aos="fade-up" data-aos-delay="150"></i>
+						<p class="messageDD" data-aos="fade-up" data-aos-delay="200">Browse or drag &amp; drop</p>
+					</div>
+					<div class="progress-area">
+					</div>
+					<div class="uploaded-area">
+					</div>
+					<button data-aos="fade-up" data-aos-delay="250" type="button" class="formButton" onclick="App.checkDocument()">Check</button>
+				</div>
 			</section>
-			<form action="" enctype="multipart/form-data">
-				<input id="checkNow" type="file" />
-				<button type="button" onclick="App.checkDocument()">Check</button>
-			</form>
 			<section id="remove" class="about">
 				<header id="section-header">
 					<h2 data-aos="fade-up">Remove</h2>
@@ -211,11 +251,20 @@
 						</div>
 					</div>
 				</div>
+				<div class="wrapper" data-aos="fade-up">
+					<h2 data-aos="fade-up" data-aos-delay="50">Upload your files here</h2>
+					<div class="form" data-aos="fade-up" data-aos-delay="100">
+						<input class="file-input" type="file" name="file" hidden>
+						<i class="fas fa-cloud-upload-alt" data-aos="fade-up" data-aos-delay="150"></i>
+						<p class="messageDD" data-aos="fade-up" data-aos-delay="200">Browse or drag &amp; drop</p>
+					</div>
+					<div class="progress-area">
+					</div>
+					<div class="uploaded-area">
+					</div>
+					<button data-aos="fade-up" data-aos-delay="250" type="button" class="formButton" onclick="App.removeDocument()">Remove</button>
+				</div>
 			</section>
-			<form action="" enctype="multipart/form-data">
-				<input id="removeNow" type="file" />
-				<button type="button" onclick="App.removeDocument()">Remove</button>
-			</form>
 			<section id="monitoring" class="about">
 				<header id="section-header">
 					<h2 data-aos="fade-up">Monitoring</h2>
