@@ -642,7 +642,7 @@ a {
 }
 
 .banner .container {
-	padding: 80px;
+	padding: 50px;
 	border-radius: 5px;
 	background: #f6f9ff;
 }
@@ -1374,7 +1374,7 @@ a {
 # MY ADDS
 --------------------------------------------------------------*/
 .bottomSpace {
-	margin-bottom: 20px;
+	margin-bottom: 30px;
 }
 
 .rotate {
@@ -1458,7 +1458,7 @@ a {
 }
 
 .upperSpace {
-	margin-top: 20px;
+	margin-top: 30px;
 }
 
 .iframeMap {
@@ -2156,10 +2156,6 @@ a {
 	border-radius: 50%;
 }
 
-.notification:not(.visibleOn) {
-	display: none;
-}
-
-.notification span {
+.notification p {
 	line-break: anywhere;
 }

@@ -1,6 +1,6 @@
 App = {
   files: [],
-  loading: false,
+  contractDecisor: true,
   contracts: {},
 
   load: async () => {
@@ -39,8 +39,12 @@ App = {
     })
 
     App.contracts.Notarization = TruffleContract(await $.getJSON('Notarization.json'));
+    App.contracts.Notary = TruffleContract(await $.getJSON('Notary.json'));
     App.contracts.Notarization.setProvider(App.web3Provider);
+    App.contracts.Notary.setProvider(App.web3Provider);
     App.notarization = await App.contracts.Notarization.deployed();
+    App.notary= await App.contracts.Notary.deployed();
+    App.switchContract();
 
     web3.eth.defaultAccount = web3.eth.accounts[0];
 
@@ -49,12 +53,12 @@ App = {
 
   uploadDocument: async () => {
     if (App.files.length > 0 && GraphicsUpdater.nameNow != "") {
-      await Hasher.createHash(App.files)
+      await Utils.createHash(App.files)
         .then(async function (hash) {
           var n = GraphicsUpdater.nameNow.value;
           var c = GraphicsUpdater.commentsNow.value;
-          await App.notarization.upload(n, hash, c);
-          GraphicsUpdater.notifications(GraphicsUpdater.notifyArea1, ["The document have been " + (await App.notarization.getUpdateStatus() ? "updated" : "uploaded") + " correctly!", n, c, Utils.epochConverter(await App.notarization.getCurrentDocumentDate()), hash, await App.notarization.getCurrentDocumentOwner()]);
+          await App.contract.upload(n, hash, c);
+          GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea1, ["The document have been " + (await App.contract.getUpdateStatus() ? "updated" : "uploaded") + " correctly!", "Name", n, "Comments", c, "Date", Utils.epochConverter(await App.contract.getCurrentDocumentDate()), "Hash", hash, "Owner", await App.contract.getCurrentDocumentOwner()], 1);
           
           GraphicsUpdater.resetLine(GraphicsUpdater.nameNow);
           GraphicsUpdater.resetLine(GraphicsUpdater.commentsNow);
@@ -67,19 +71,19 @@ App = {
           console.error(err);
         });
     } else if (GraphicsUpdater.nameNow == "") {
-      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea1, "Empty name found!");
+      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea1, ["Empty name found!"], 1);
     } else {
-      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea1, "No document found!");
+      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea1, ["No document found!"], 1);
     }
   },
 
   checkDocument: async () => {
     if (App.files.length > 0) {
-      await Hasher.createHash(App.files)
+      await Utils.createHash(App.files)
         .then(async function (hash) {
-          await App.notarization.check(hash);
-          var n = await App.notarization.getCurrentDocumentName();
-          GraphicsUpdater.notifications(GraphicsUpdater.notifyArea2, ["The document have " + (n == "" ? "not " : "") + " been found!", n, await App.notarization.getCurrentDocumentComments(), Utils.epochConverter(await App.notarization.getCurrentDocumentDate()), hash, await App.notarization.getCurrentDocumentOwner()]);
+          await App.contract.check(hash);
+          var n = await App.contract.getCurrentDocumentName();
+          GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea2, ["The document have " + (n == "" ? "not " : "") + " been found!", "Name", n, "Comments", await App.contract.getCurrentDocumentComments(), "Date", Utils.epochConverter(await App.contract.getCurrentDocumentDate()), "Hash", hash, "Owner", await App.contract.getCurrentDocumentOwner()], 2);
           
           GraphicsUpdater.resetArea(GraphicsUpdater.progressArea2);
           GraphicsUpdater.resetArea(GraphicsUpdater.uploadedArea2);
@@ -90,16 +94,16 @@ App = {
           console.error(err);
         });
     } else {
-      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea2, "No document found!");
+      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea2, ["No document found!"], 2);
     }
   },
 
   removeDocument: async () => {
     if (App.files.length > 0) {
-      await Hasher.createHash(App.files)
+      await Utils.createHash(App.files)
         .then(async function (hash) {
-          await App.notarization.remove(hash);
-          GraphicsUpdater.notifications(GraphicsUpdater.notifyArea3, ["The document have " + (await App.notarization.getRemoveStatus() ? "" : "not ") + " been removed correctly!", await App.notarization.getCurrentDocumentName(), await App.notarization.getCurrentDocumentComments(), Utils.epochConverter(await App.notarization.getCurrentDocumentDate()), hash, await App.notarization.getCurrentDocumentOwner()]);
+          await App.contract.remove(hash);
+          GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea3, ["The document have " + (await App.contract.getRemoveStatus() ? "" : "not ") + " been removed correctly!", "Name", await App.contract.getCurrentDocumentName(), "Comments", await App.contract.getCurrentDocumentComments(), "Date", Utils.epochConverter(await App.contract.getCurrentDocumentDate()), "Hash", hash, "Owner", await App.contract.getCurrentDocumentOwner()], 3);
           
           GraphicsUpdater.resetArea(GraphicsUpdater.progressArea3);
           GraphicsUpdater.resetArea(GraphicsUpdater.uploadedArea3);
@@ -110,22 +114,27 @@ App = {
           console.error(err);
         });
     } else {
-      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea3, "No document found!");
+      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea3, ["No document found!"], 3);
     }
   },
 
-  watchAll: async () => {
-    var documents = await App.notarization.getDocumentCount();
-    var interactions = await App.notarization.getInteractionCount();
+  monitoring: async () => {
+    var documents = await App.contract.getDocumentCount();
+    var interactions = await App.contract.getInteractionCount();
     for (var d = 1; d < documents; d++) {
-      console.log(await App.notarization.documentMapping(d));
+      console.log(await App.contract.documentMapping(d));
     }
     for (var i = 0; i < interactions; i++) {
-      console.log(await App.notarization.interactionMapping(i));
+      console.log(await App.contract.interactionMapping(i));
     }
   },
 
   insertInteraction: async () => {
+  },
+
+  switchContract: async() => {
+    App.contract = App.contractDecisor ? App.notarization : App.notary;
+    App.contractDecisor = !App.contractDecisor;
   }
 }
 
@@ -141,16 +150,22 @@ Utils = {
 
   createHash: (files) => {
     function toHex(buffer) {
+      var i, n, k, value, stringValue, padding, paddedValue;
       var hexCodes = [];
-      for (var view = new DataView(buffer), i = 0, n = view.byteLength, k = Uint32Array.BYTES_PER_ELEMENT, padding = '00000000'; i < n; i += k) {
-        hexCodes.push(padding + view.getUint32(i).toString(16)).slice(-padding.length);
+      var view = new DataView(buffer);
+      for (i = 0, n = view.byteLength, k = Uint32Array.BYTES_PER_ELEMENT; i < n; i += k) {
+        value = view.getUint32(i);
+        stringValue = value.toString(16);
+        padding = '00000000';
+        paddedValue = (padding + stringValue).slice(-padding.length);
+        hexCodes.push(paddedValue);
       }
       var hash = hexCodes.join('');
       if (hash.substring(0, 2) !== '0x') {
         hash = "0x" + hash;
       }
       return hash;
-    } 
+    }
 
     return new Promise(function (resolve, reject) {
       var reader = new FileReader();
@@ -191,9 +206,9 @@ GraphicsUpdater = {
   notifyArea1: document.querySelectorAll(".notification")[0],
   notifyArea2: document.querySelectorAll(".notification")[1],
   notifyArea3: document.querySelectorAll(".notification")[2],
-  image1: "",
-  image2: "",
-  image3: "",
+  image1: "assets/img/material/vectorial/intro-img.svg",
+  image2: "assets/img/material/vectorial/hero-carousel-2.svg",
+  image3: "assets/img/material/vectorial/features-5.svg",
   pastNotifyArea: null,
 
   eventLoader: async () => {
@@ -291,38 +306,46 @@ GraphicsUpdater = {
   },
 
   notifierGUI: async (notifyArea, toNotify, idOperation) => {
+    if (GraphicsUpdater.pastNotifyArea != null) {
+      GraphicsUpdater.pastNotifyArea.innerHTML = "";
+    }
+    GraphicsUpdater.pastNotifyArea = notifyArea;
+
+    notifyArea.innerHTML = '<div class="banner"><header id="section-header"><h2 data-aos="fade-up">Notification</h2><p data-aos="fade-up" data-aos-delay="100">View your transaction</p></header><div class="container" data-aos="fade-up" data-aos-delay="200"><div id="containerID" class="row g-5"></div></div></div>';
+    var containerID = document.getElementById("containerID");
+    var image = '<div class="col-lg-4 col-md-6 d-flex align-items-center aos-init aos-animate" data-aos="zoom-out" data-aos-delay="400"><div class="img"><img id="containerImage" class="img-fluid bottomSpace upperSpace"></div></div>';
+    var lines = '<div class="col-lg-8 col-md-6 content d-flex flex-column justify-content-center"><h3 data-aos="fade-up" data-aos-delay="250" class="aos-init aos-animate">The followings are the recap information of the operation you just did</h3><h2 data-aos="fade-up" data-aos-delay="300" class="aos-init aos-animate">Some Blockchain stuff just happend!</h2><p id="containerLines"></p></div>';
+    containerID.innerHTML = idOperation % 2 ? image + lines : lines + image;
+    var containerImage = document.getElementById("containerImage");
+    var containerLines = document.getElementById("containerLines");
+    
+    if (idOperation % 2) {
+      containerImage.classList.add("floating");
+    } else {
+      containerImage.classList.add("antiFloating");
+    }
+
     switch (idOperation) {
       case 1:
-
+        containerImage.src = GraphicsUpdater.image1;
         break;
       case 2:
-
+        containerImage.src = GraphicsUpdater.image2;
         break;
       default:
-
+        containerImage.src = GraphicsUpdater.image3;
     }
-  },
 
-  notifications1: async (toNotify, image) => {
-    GraphicsUpdater.pastNotifyArea.innerHTML = "";
-    GraphicsUpdater.notifyArea1.innerHTML = '<div class="banner"><header id="section-header"><h2 data-aos="fade-up">Notification</h2><p data-aos="fade-up" data-aos-delay="100">View your transaction</p></header><div class="container" data-aos="fade-up" data-aos-delay="200"><div class="row g-5"><div class="col-lg-4 col-md-6 order-first order-md-last d-flex align-items-center"></div></div><div class="col-lg-8 col-md-6 content d-flex flex-column justify-content-center order-last order-md-first"><h3 data-aos="fade-up" data-aos-delay="250">The followings are the recap information of the operation you just did</h3><h2 data-aos="fade-up" data-aos-delay="300">Some Blockchain stuff just happend!</h2>';
-    for (var i = 0; i < toNotify.length; i++) {
-      GraphicsUpdater.notifyArea1.innerHTML += '<span data-aos="fade-up" data-aos-delay="350">' + toNotify[i] + "</span></br>";
+    containerLines.innerHTML = '<b>' + toNotify[0] + '</b>';
+    for (var i = 1; i < toNotify.length; i++) {
+      if (i % 2) {
+        containerLines.innerHTML += '</br><b>' + toNotify[i] + ':</b> ';
+      } else {
+        containerLines.innerHTML += toNotify[i];
+      }
     }
-    GraphicsUpdater.notifyArea1 += '</div></div></div><div class="img"><img src="assets/img/material/vectorial/' + image + '" class="img-fluid antiFloating bottomSpace upperSpace" data-aos="zoom-out" data-aos-delay="400"></div></div>';
-    GraphicsUpdater.notifyArea1.scrollIntoView();
-    GraphicsUpdater.pastNotifyArea = GraphicsUpdater.notifyArea1;
-  },
-
-  notifications2: async (toNotify) => {
-    GraphicsUpdater.pastNotifyArea.innerHTML = "";
-    GraphicsUpdater.notifyArea2.innerHTML = '<div class="banner"><header id="section-header"><h2 data-aos="fade-up">Notification</h2><p data-aos="fade-up" data-aos-delay="100">View your transaction</p></header><div class="container" data-aos="fade-up" data-aos-delay="200"><div class="row g-5"><div class="col-lg-4 col-md-6 order-first order-md-last d-flex align-items-center"><div class="img"><img src="assets/img/material/vectorial/hero-carousel-2.svg" class="img-fluid antiFloating bottomSpace upperSpace" data-aos="zoom-out" data-aos-delay="400"></div></div><div class="col-lg-8 col-md-6 content d-flex flex-column justify-content-center order-last order-md-first"><h3 data-aos="fade-up" data-aos-delay="250">The followings are the recap information of the operation you just did</h3><h2 data-aos="fade-up" data-aos-delay="300">Some Blockchain stuff just happend!</h2>';
-    for (var i = 0; i < toNotify.length; i++) {
-      GraphicsUpdater.notifyArea2.innerHTML += '<span data-aos="fade-up" data-aos-delay="350">' + toNotify[i] + "</span></br>";
-    }
-    GraphicsUpdater.notifyArea2 += '</div></div></div></div></div>';
-    GraphicsUpdater.notifyArea2.scrollIntoView();
-    GraphicsUpdater.pastNotifyArea = GraphicsUpdater.notifyArea2;
+    
+    window.scrollTo(0, notifyArea.offsetTop-250);
   },
 
   animationUploading: async (file, progressArea, uploadedArea) => {
