@@ -1,5 +1,7 @@
 App = {
-  files: [],
+  files1: [],
+  files2: [],
+  files3: [],
   contractDecisor: true,
   contracts: {},
 
@@ -52,8 +54,8 @@ App = {
   },
 
   uploadDocument: async () => {
-    if (App.files.length > 0 && GraphicsUpdater.nameNow != "") {
-      await Utils.createHash(App.files)
+    if (App.files1.length > 0 && GraphicsUpdater.nameNow != "") {
+      await Utils.createHash(App.files1)
         .then(async function (hash) {
           var n = GraphicsUpdater.nameNow.value;
           var c = GraphicsUpdater.commentsNow.value;
@@ -64,7 +66,7 @@ App = {
           GraphicsUpdater.resetLine(GraphicsUpdater.commentsNow);
           GraphicsUpdater.resetArea(GraphicsUpdater.progressArea1);
           GraphicsUpdater.resetArea(GraphicsUpdater.uploadedArea1);
-          GraphicsUpdater.resetFiles();
+          GraphicsUpdater.resetFiles1();
           App.insertInteraction();
         })
         .catch(function (err) {
@@ -78,8 +80,8 @@ App = {
   },
 
   checkDocument: async () => {
-    if (App.files.length > 0) {
-      await Utils.createHash(App.files)
+    if (App.files2.length > 0) {
+      await Utils.createHash(App.files2)
         .then(async function (hash) {
           await App.contract.check(hash);
           var n = await App.contract.getCurrentDocumentName();
@@ -87,7 +89,7 @@ App = {
           
           GraphicsUpdater.resetArea(GraphicsUpdater.progressArea2);
           GraphicsUpdater.resetArea(GraphicsUpdater.uploadedArea2);
-          GraphicsUpdater.resetFiles();
+          GraphicsUpdater.resetFiles2();
           App.insertInteraction();
         })
         .catch(function (err) {
@@ -99,15 +101,15 @@ App = {
   },
 
   removeDocument: async () => {
-    if (App.files.length > 0) {
-      await Utils.createHash(App.files)
+    if (App.files3.length > 0) {
+      await Utils.createHash(App.files3)
         .then(async function (hash) {
           await App.contract.remove(hash);
           GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea3, ["The document have " + (await App.contract.getRemoveStatus() ? "" : "not ") + " been removed correctly!", "Name", await App.contract.getCurrentDocumentName(), "Comments", await App.contract.getCurrentDocumentComments(), "Date", Utils.epochConverter(await App.contract.getCurrentDocumentDate()), "Hash", hash, "Owner", await App.contract.getCurrentDocumentOwner()], 3);
           
           GraphicsUpdater.resetArea(GraphicsUpdater.progressArea3);
           GraphicsUpdater.resetArea(GraphicsUpdater.uploadedArea3);
-          GraphicsUpdater.resetFiles();
+          GraphicsUpdater.resetFiles3();
           App.insertInteraction();
         })
         .catch(function (err) {
@@ -200,7 +202,9 @@ GraphicsUpdater = {
   fileInput3: document.querySelectorAll(".file-input")[2],
   progressArea3: document.querySelectorAll(".progress-area")[2],
   uploadedArea3: document.querySelectorAll(".uploaded-area")[2],
-  numFiles: 0,
+  numFiles1: 0,
+  numFiles2: 0,
+  numFiles3: 0,
   nameNow: document.getElementById("nameNow"),
   commentsNow: document.getElementById("commentsNow"),
   notifyArea1: document.querySelectorAll(".notification")[0],
@@ -225,15 +229,21 @@ GraphicsUpdater = {
     });
 
     GraphicsUpdater.fileInput1.onchange = async ({target}) => {
-      GraphicsUpdater.animationUploading(target.files[0], GraphicsUpdater.progressArea1, GraphicsUpdater.uploadedArea1);
+      if (target.files[0] != undefined) {
+        GraphicsUpdater.animationUploading(target.files[0], GraphicsUpdater.progressArea1, GraphicsUpdater.uploadedArea1, GraphicsUpdater.numFiles1++);
+      }
     }
 
     GraphicsUpdater.fileInput2.onchange = async ({target}) => {
-      GraphicsUpdater.animationUploading(target.files[0], GraphicsUpdater.progressArea2, GraphicsUpdater.uploadedArea2);
+      if (target.files[0] != undefined) {
+        GraphicsUpdater.animationUploading(target.files[0], GraphicsUpdater.progressArea2, GraphicsUpdater.uploadedArea2, GraphicsUpdater.numFiles2++);
+      }
     }
 
     GraphicsUpdater.fileInput3.onchange = async ({target}) => {
-      GraphicsUpdater.animationUploading(target.files[0], GraphicsUpdater.progressArea3, GraphicsUpdater.uploadedArea3);
+      if (target.files[0] != undefined) {
+        GraphicsUpdater.animationUploading(target.files[0], GraphicsUpdater.progressArea3, GraphicsUpdater.uploadedArea3, GraphicsUpdater.numFiles3++);
+      }
     }
     
     GraphicsUpdater.form1.addEventListener("dragover", async (event) => {
@@ -252,32 +262,32 @@ GraphicsUpdater = {
     });
     
     GraphicsUpdater.form1.addEventListener("dragleave", async () => {
-      GraphicsUpdater.closeDrag();
+      GraphicsUpdater.closeDrag(GraphicsUpdater.form1, GraphicsUpdater.dragText1);
     });
     
     GraphicsUpdater.form2.addEventListener("dragleave", async () => {
-      GraphicsUpdater.closeDrag();
+      GraphicsUpdater.closeDrag(GraphicsUpdater.form2, GraphicsUpdater.dragText2);
     });
     
     GraphicsUpdater.form3.addEventListener("dragleave", async () => {
-      GraphicsUpdater.closeDrag();
+      GraphicsUpdater.closeDrag(GraphicsUpdater.form3, GraphicsUpdater.dragText3);
     });
     
     GraphicsUpdater.form1.addEventListener("drop", async (event) => {
       event.preventDefault();
-      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], GraphicsUpdater.progressArea1, GraphicsUpdater.uploadedArea1);
+      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], GraphicsUpdater.progressArea1, GraphicsUpdater.uploadedArea1, GraphicsUpdater.numFiles1++);
       GraphicsUpdater.closeDrag(GraphicsUpdater.form1, GraphicsUpdater.dragText1);
     });
     
     GraphicsUpdater.form2.addEventListener("drop", async (event) => {
       event.preventDefault();
-      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], GraphicsUpdater.progressArea2, GraphicsUpdater.uploadedArea2);
+      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], GraphicsUpdater.progressArea2, GraphicsUpdater.uploadedArea2, GraphicsUpdater.numFiles2++);
       GraphicsUpdater.closeDrag(GraphicsUpdater.form2, GraphicsUpdater.dragText2);
     });
     
     GraphicsUpdater.form3.addEventListener("drop", async (event) => {
       event.preventDefault();
-      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], GraphicsUpdater.progressArea3, GraphicsUpdater.uploadedArea3);
+      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], GraphicsUpdater.progressArea3, GraphicsUpdater.uploadedArea3, GraphicsUpdater.numFiles3++);
       GraphicsUpdater.closeDrag(GraphicsUpdater.form3, GraphicsUpdater.dragText3);
     });
   },
@@ -288,8 +298,10 @@ GraphicsUpdater = {
   },
 
   closeDrag: async (form, dragText) => {
-    form.classList.remove("activeForm");
-    dragText.innerHTML = "Browse or drag &amp; drop";
+    if (form != undefined) {
+      form.classList.remove("activeForm");
+      dragText.innerHTML = "Browse or drag &amp; drop";
+    }
   },
 
   resetLine: async (e) => {
@@ -300,9 +312,19 @@ GraphicsUpdater = {
     e.innerHTML = "";
   },
 
-  resetFiles: async () => {
-    GraphicsUpdater.numFiles = 0;
-    App.files = [];
+  resetFiles1: async () => {
+    GraphicsUpdater.numFiles1 = 0;
+    App.files1 = [];
+  },
+
+  resetFiles2: async () => {
+    GraphicsUpdater.numFiles2 = 0;
+    App.files2 = [];
+  },
+
+  resetFiles3: async () => {
+    GraphicsUpdater.numFiles3 = 0;
+    App.files3 = [];
   },
 
   notifierGUI: async (notifyArea, toNotify, idOperation) => {
@@ -348,7 +370,7 @@ GraphicsUpdater = {
     window.scrollTo(0, notifyArea.offsetTop-250);
   },
 
-  animationUploading: async (file, progressArea, uploadedArea) => {
+  animationUploading: async (file, progressArea, uploadedArea, numFiles) => {
     function progressLoading(file, progressArea) {
       progressArea.innerHTML = '<li class="row"><i class="fas fa-file-alt"></i><div class="content"><div class="details"><span class="name" id="uploadingName"></span><span class="percent" id="percentValue"></span></div><div class="progress-bar"><div class="progress" id="progressWidth" style="width:0%"></div></div></div></li>';
       var uploadingName = document.getElementById("uploadingName");
@@ -380,7 +402,7 @@ GraphicsUpdater = {
       });
     }
 
-    App.files[GraphicsUpdater.numFiles++] = file;
+    App.files[numFiles] = file;
     progressLoading(file, progressArea);
     uploadedLoading(file, uploadedArea);
   }
