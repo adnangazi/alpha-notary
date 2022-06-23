@@ -2,9 +2,8 @@
 
 pragma solidity >= 0.5.16;
 
-contract Notarization {
+contract Notary {
     uint256 documentCount;
-    uint256 interactionCount;
 
     bool updateStatus;
     bool removeStatus;
@@ -27,31 +26,14 @@ contract Notarization {
         bool isSet;
     }
 
-    struct Interaction {
-        string interactionName;
-        uint256 interactionDate;
-        uint256 interactionHashValue;
-        address interactionOwner;
-        
-        string name;
-        uint256 date;
-        uint256 hashValue;
-        string comments;
-        address owner;
-        bool isSet;
-    }
-
     mapping(uint256 => Document) public documentMapping;
-    mapping(uint256 => Interaction) public interactionMapping;
 
     event documentEntry(string _name, uint256 _date, uint256 _hashValue, string _comments, address indexed _owner, bool _isSet);
-    event interactionEntry(string _interactionName, uint256 _interactionDate, uint256 _interactionHashValue, address indexed _interactionOwner, string _name, uint256 _date, uint256 _hashValue, string _comments, address indexed _owner, bool _isSet);
 
     Document emptyDocument;
 
     constructor() public {
         documentCount = 1;
-        interactionCount = 0;
         emptyAddress = address(0);
         emptyDocument = Document("", 0, 0, "", emptyAddress, false);
         messageSender = msg.sender;
@@ -79,10 +61,6 @@ contract Notarization {
         } else {
             pos = index;
             updateStatus = true;
-
-            Interaction memory interaction = Interaction("update", block.timestamp, document.hashValue, messageSender, document.name, document.date, document.hashValue, document.comments, document.owner, document.isSet);
-            interactionMapping[interactionCount++] = interaction;
-            emit interactionEntry(interaction.interactionName, interaction.interactionDate, interaction.interactionHashValue, interaction.interactionOwner, interaction.name, interaction.date, interaction.hashValue, interaction.comments, interaction.owner, interaction.isSet);
         }
 
         currentDocumentDate = document.date;
@@ -113,10 +91,6 @@ contract Notarization {
             currentDocumentComments = document.comments;
             currentDocumentOwner = document.owner;
         }
-
-        Interaction memory interaction = Interaction("check", block.timestamp, _hashValue, messageSender, document.name, document.date, document.hashValue, document.comments, document.owner, document.isSet);
-        interactionMapping[interactionCount++] = interaction;
-        emit interactionEntry(interaction.interactionName, interaction.interactionDate, interaction.interactionHashValue, interaction.interactionOwner, interaction.name, interaction.date, interaction.hashValue, interaction.comments, interaction.owner, interaction.isSet);
     }
 
     function remove(uint256 _hashValue) public {
@@ -144,10 +118,6 @@ contract Notarization {
 
             emit documentEntry(document.name, document.date, document.hashValue, document.comments, document.owner, document.isSet);
         }
-
-        Interaction memory interaction = Interaction("remove", block.timestamp, _hashValue, messageSender, document.name, document.date, document.hashValue, document.comments, document.owner, document.isSet);
-        interactionMapping[interactionCount++] = interaction;
-        emit interactionEntry(interaction.interactionName, interaction.interactionDate, interaction.interactionHashValue, interaction.interactionOwner, interaction.name, interaction.date, interaction.hashValue, interaction.comments, interaction.owner, interaction.isSet);
     }
 
     function getDocument(uint256 pos) public view returns(string memory, uint256, uint256, string memory, address, bool) {
@@ -155,17 +125,8 @@ contract Notarization {
         return (document.name, document.date, document.hashValue, document.comments, document.owner, document.isSet);
     }
 
-    function getInteraction(uint256 pos) public view returns(string memory, uint256, uint256, address, string memory, uint256, uint256, string memory, address, bool) {
-        Interaction storage interaction = interactionMapping[pos];
-        return (interaction.interactionName, interaction.interactionDate, interaction.interactionHashValue, interaction.interactionOwner, interaction.name, interaction.date, interaction.hashValue, interaction.comments, interaction.owner, interaction.isSet);
-    }
-
     function getDocumentCount() public view returns (uint256) {
         return documentCount;
-    }
-
-    function getInteractionCount() public view returns (uint256) {
-        return interactionCount;
     }
 
     function getCurrentDocumentName() public view returns (string memory) {

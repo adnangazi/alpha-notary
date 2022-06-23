@@ -87,7 +87,7 @@
 				<div class="container">
 					<div class="row gx-0">
                   		<div class="col-lg-6 d-flex align-items-center crossBackgroundLeft bottomSpace" data-aos="zoom-out" data-aos-delay="400">
-							<div class="card floating">
+							<div class="container card floating">
 								<div class="card__front card__part">
 									<img data-aos="zoom-out" data-aos-delay="450" class="card__front-square card__square" src="assets/img/card/chip.png">
 									<img data-aos="zoom-out" data-aos-delay="500" class="card__front-logo card__logo" src="assets/img/card/coin.png">
@@ -164,28 +164,30 @@
 						</div>
 					</div>
 				</div>
-				<div class="wrapper bigForm row gx-0" data-aos="fade-up">
-					<div class="col-lg-6 d-flex flex-column">
+				<div class="container wrapper bigForm row gx-0" data-aos="fade-up">
+					<div class="col-lg-6 d-flex flex-column rightLeftForm">
 						<h2 data-aos="fade-up" data-aos-delay="50">Upload your files here</h2>
 						<div class="form" data-aos="fade-up" data-aos-delay="100">
 							<input class="file-input" type="file" name="file" hidden>
 							<i class="fas fa-cloud-upload-alt" data-aos="fade-up" data-aos-delay="150"></i>
-							<p class="messageDD" data-aos="fade-up" data-aos-delay="200">Browse or drag &amp; drop</p>
+							<p class="dragText" data-aos="fade-up" data-aos-delay="200">Browse or drag &amp; drop</p>
 						</div>
 						<div class="progress-area">
 						</div>
 						<div class="uploaded-area">
 						</div>
 					</div>
-					<div class="col-lg-6 d-flex flex-column rightForm">
+					<div class="col-lg-6 d-flex flex-column rightLeftForm">
 						<h2 data-aos="fade-up" data-aos-delay="100">Insert your files info here</h2>
 						<label data-aos="fade-up" data-aos-delay="150">Document name</label>
-						<input data-aos="fade-up" data-aos-delay="200" type="text" placeholder="Subject" required>
+						<input data-aos="fade-up" data-aos-delay="200" type="text" placeholder="Subject" id="nameNow" required>
 						<label data-aos="fade-up" data-aos-delay="250">Document comments</label>
-						<textarea data-aos="fade-up" data-aos-delay="300" cols="30" rows="7" placeholder="Message"></textarea>
-						<button data-aos="fade-up" data-aos-delay="350" type="button" class="formButton" onclick="App.checkDocument()">Check</button>
+						<textarea data-aos="fade-up" data-aos-delay="300" cols="30" rows="7" placeholder="Message" id="commentsNow"></textarea>
+						<button data-aos="fade-up" data-aos-delay="350" type="button" class="formButton" onclick="App.uploadDocument()">Upload</button>
 					</div>
 				</div>
+				<section class="notification">
+				</section>
 			</section>
 			<section id="check" class="about">
 				<header id="section-header">
@@ -212,12 +214,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="wrapper" data-aos="fade-up">
+				<div class="container wrapper" data-aos="fade-up">
 					<h2 data-aos="fade-up" data-aos-delay="50">Upload your files here</h2>
 					<div class="form" data-aos="fade-up" data-aos-delay="100">
 						<input class="file-input" type="file" name="file" hidden>
 						<i class="fas fa-cloud-upload-alt" data-aos="fade-up" data-aos-delay="150"></i>
-						<p class="messageDD" data-aos="fade-up" data-aos-delay="200">Browse or drag &amp; drop</p>
+						<p class="dragText data-aos="fade-up" data-aos-delay="200">Browse or drag &amp; drop</p>
 					</div>
 					<div class="progress-area">
 					</div>
@@ -225,6 +227,26 @@
 					</div>
 					<button data-aos="fade-up" data-aos-delay="250" type="button" class="formButton" onclick="App.checkDocument()">Check</button>
 				</div>
+				<section class="banner notification">
+					<header id="section-header">
+						<h2>Notification</h2>
+						<p>View your transaction</p>
+					</header>
+					<div class="container">
+						<div class="row g-5">
+							<div class="col-lg-8 col-md-6 content d-flex flex-column justify-content-center order-last order-md-first">
+								<h3>The followings are the recap information of the operation you just did</h3>
+								<h2>Some Blockchain stuff just happend!</h2>
+								<div class="notifySection"></div>
+							</div>
+							<div class="col-lg-4 col-md-6 order-first order-md-last d-flex align-items-center">
+								<div class="img">
+									<img src="assets/img/material/vectorial/features-5.svg" class="img-fluid antiFloating bottomSpace upperSpace">
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
 			</section>
 			<section id="remove" class="about">
 				<header id="section-header">
@@ -251,12 +273,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="wrapper" data-aos="fade-up">
+				<div class="container wrapper" data-aos="fade-up">
 					<h2 data-aos="fade-up" data-aos-delay="50">Upload your files here</h2>
 					<div class="form" data-aos="fade-up" data-aos-delay="100">
 						<input class="file-input" type="file" name="file" hidden>
 						<i class="fas fa-cloud-upload-alt" data-aos="fade-up" data-aos-delay="150"></i>
-						<p class="messageDD" data-aos="fade-up" data-aos-delay="200">Browse or drag &amp; drop</p>
+						<p class="dragText data-aos="fade-up" data-aos-delay="200">Browse or drag &amp; drop</p>
 					</div>
 					<div class="progress-area">
 					</div>
@@ -264,6 +286,26 @@
 					</div>
 					<button data-aos="fade-up" data-aos-delay="250" type="button" class="formButton" onclick="App.removeDocument()">Remove</button>
 				</div>
+				<section class="banner notification">
+					<header id="section-header">
+						<h2>Notification</h2>
+						<p>View your transaction</p>
+					</header>
+					<div class="container">
+						<div class="row g-5">
+							<div class="col-lg-8 col-md-6 content d-flex flex-column justify-content-center order-last order-md-first">
+								<h3>The followings are the recap information of the operation you just did</h3>
+								<h2>Some Blockchain stuff just happend!</h2>
+								<div class="notifySection"></div>
+							</div>
+							<div class="col-lg-4 col-md-6 order-first order-md-last d-flex align-items-center">
+								<div class="img">
+									<img src="assets/img/material/vectorial/intro-img.svg" class="img-fluid antiFloating bottomSpace upperSpace">
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
 			</section>
 			<section id="monitoring" class="about">
 				<header id="section-header">

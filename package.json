@@ -1,6 +1,6 @@
 {
   "name":"alpha-dapp",
-  "version":"1.15.0",
+  "version":"1.0.0",
   "description":"Blockchain Notarization dApp",
   "author":"Adnan Latif Gazi",
   "license":"MIT",
@@ -12,8 +12,8 @@
     "dev":"lite-server"
   },
   "devDependencies":{
-    "truffle":"5.0.2",
+    "truffle":"5.5.18",
     "truffle-contract":"3.0.6",
-    "web3":"^0.20.6"
+    "web3":"0.20.6"
   }
 }
