@@ -4,21 +4,9 @@ App = {
   contracts: {},
 
   load: async () => {
-    await App.loadWeb3()
-    await App.loadAccount()
-    await App.loadContract()
-    await App.render()
-    web3.eth.defaultAccount = web3.eth.accounts[0]
-    await App.watchAll()
-  },
-
-  connection: async () => {
-  },
-
-  loadWeb3: async () => {
     if (typeof web3 !== 'undefined') {
-      App.web3Provider = web3.currentProvider
-      web3 = new Web3(web3.currentProvider)
+      App.web3Provider = web3.currentProvider;
+      web3 = new Web3(web3.currentProvider);
     } else {
       window.alert("Please connect to Metamask!")
     }
@@ -38,32 +26,25 @@ App = {
     } else {
       window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
     }
-  },
 
-  loadAccount: async () => {
-    App.account = web3.eth.accounts[0]
-    document.getElementById('account').innerHTML = App.account
+    App.account = web3.eth.accounts[0];
+    document.getElementById('account').innerHTML = App.account;
     await web3.eth.getBalance(App.account, function(error, result){ 
       if(!error) {
-        const walletValue = parseInt(result, 10) / 10 ** 18
-        document.getElementById('walletBase').innerHTML = walletValue + " Coin" + (walletValue != 1 && walletValue != 0 ? "s" : "")
-      } else 
-        console.error(error); 
+        const walletValue = parseInt(result, 10) / 10 ** 18;
+        document.getElementById('walletBase').innerHTML = walletValue + " Coin" + (walletValue != 1 && walletValue != 0 ? "s" : "");
+      } else {
+        console.error(error);
+      }
     })
-  },
 
-  loadContract: async () => {
-    const notarization = await $.getJSON('Notarization.json')
-    App.contracts.Notarization = TruffleContract(notarization)
-    App.contracts.Notarization.setProvider(App.web3Provider)
-    App.notarization = await App.contracts.Notarization.deployed()
-  },
+    App.contracts.Notarization = TruffleContract(await $.getJSON('Notarization.json'));
+    App.contracts.Notarization.setProvider(App.web3Provider);
+    App.notarization = await App.contracts.Notarization.deployed();
 
-  render: async () => {
-    if (App.loading) {
-      return
-    }
-    $('#account').html(App.account)
+    web3.eth.defaultAccount = web3.eth.accounts[0];
+
+    App.monitoring();
   },
 
   uploadDocument: async () => {
@@ -80,14 +61,15 @@ App = {
           GraphicsUpdater.resetArea(GraphicsUpdater.progressArea1);
           GraphicsUpdater.resetArea(GraphicsUpdater.uploadedArea1);
           GraphicsUpdater.resetFiles();
+          App.insertInteraction();
         })
         .catch(function (err) {
           console.error(err);
         });
     } else if (GraphicsUpdater.nameNow == "") {
-      GraphicsUpdater.errorMessage(GraphicsUpdater.notifyArea1, "Empty name found!");
+      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea1, "Empty name found!");
     } else {
-      GraphicsUpdater.errorMessage(GraphicsUpdater.notifyArea1, "No document found!");
+      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea1, "No document found!");
     }
   },
 
@@ -102,12 +84,13 @@ App = {
           GraphicsUpdater.resetArea(GraphicsUpdater.progressArea2);
           GraphicsUpdater.resetArea(GraphicsUpdater.uploadedArea2);
           GraphicsUpdater.resetFiles();
+          App.insertInteraction();
         })
         .catch(function (err) {
           console.error(err);
         });
     } else {
-      GraphicsUpdater.errorMessage(GraphicsUpdater.notifyArea2, "No document found!");
+      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea2, "No document found!");
     }
   },
 
@@ -121,16 +104,14 @@ App = {
           GraphicsUpdater.resetArea(GraphicsUpdater.progressArea3);
           GraphicsUpdater.resetArea(GraphicsUpdater.uploadedArea3);
           GraphicsUpdater.resetFiles();
+          App.insertInteraction();
         })
         .catch(function (err) {
           console.error(err);
         });
     } else {
-      GraphicsUpdater.errorMessage(GraphicsUpdater.notifyArea3, "No document found!");
+      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea3, "No document found!");
     }
-  },
-
-  updateTransactions: async () => {
   },
 
   watchAll: async () => {
@@ -142,46 +123,9 @@ App = {
     for (var i = 0; i < interactions; i++) {
       console.log(await App.notarization.interactionMapping(i));
     }
-  }
-}
+  },
 
-Hasher = {
-  createHash: async (files) => {
-    function toHex(buffer) {
-      var i, n, k, value, stringValue, padding, paddedValue;
-      var hexCodes = [];
-      var view = new DataView(buffer);
-      for (i = 0, n = view.byteLength, k = Uint32Array.BYTES_PER_ELEMENT; i < n; i += k) {
-        value = view.getUint32(i);
-        stringValue = value.toString(16);
-        padding = '00000000';
-        paddedValue = (padding + stringValue).slice(-padding.length);
-        hexCodes.push(paddedValue);
-      }
-      var hash = hexCodes.join('');
-      if (hash.substring(0, 2) !== '0x') {
-        hash = "0x" + hash;
-      }
-      return hash;
-    } 
-
-    function calculateHash(files) {
-      return new Promise(function (resolve, reject) {
-        var reader = new FileReader();
-        reader.onload = function () {
-          var buffer = this.result;
-          crypto.subtle.digest('SHA-256', buffer)
-            .then(function (hash) {
-              resolve(toHex(hash));
-            })
-            .catch(reject);
-        };
-        reader.onerror = reject;
-        reader.readAsArrayBuffer(new Blob(files));
-      });
-    }
-
-    return calculateHash(files)
+  insertInteraction: async () => {
   }
 }
 
@@ -193,6 +137,35 @@ Utils = {
   epochConverter(time) {
     var myDate = new Date(time * 1000);
     return "" + myDate.toGMTString();
+  },
+
+  createHash: (files) => {
+    function toHex(buffer) {
+      var hexCodes = [];
+      for (var view = new DataView(buffer), i = 0, n = view.byteLength, k = Uint32Array.BYTES_PER_ELEMENT, padding = '00000000'; i < n; i += k) {
+        hexCodes.push(padding + view.getUint32(i).toString(16)).slice(-padding.length);
+      }
+      var hash = hexCodes.join('');
+      if (hash.substring(0, 2) !== '0x') {
+        hash = "0x" + hash;
+      }
+      return hash;
+    } 
+
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        crypto.subtle.digest('SHA-256', this.result)
+          .then(function (hash) {
+            resolve(toHex(hash));
+          })
+          .catch(function (err) {
+            console.error(err);
+          });
+      };
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(new Blob(files));
+    });
   }
 }
 
@@ -218,6 +191,9 @@ GraphicsUpdater = {
   notifyArea1: document.querySelectorAll(".notification")[0],
   notifyArea2: document.querySelectorAll(".notification")[1],
   notifyArea3: document.querySelectorAll(".notification")[2],
+  image1: "",
+  image2: "",
+  image3: "",
   pastNotifyArea: null,
 
   eventLoader: async () => {
@@ -314,11 +290,7 @@ GraphicsUpdater = {
     App.files = [];
   },
 
-  bannerCreator: async () => {
-
-  },
-
-  errorMessage: async (notifyArea, toNotify, idOperation) => {
+  notifierGUI: async (notifyArea, toNotify, idOperation) => {
     switch (idOperation) {
       case 1:
 
@@ -329,7 +301,6 @@ GraphicsUpdater = {
       default:
 
     }
-
   },
 
   notifications1: async (toNotify, image) => {
@@ -355,28 +326,44 @@ GraphicsUpdater = {
   },
 
   animationUploading: async (file, progressArea, uploadedArea) => {
-    App.files[GraphicsUpdater.numFiles++] = file;
-    for (let i = 1; i <= 100; i++) {
-      Utils.sleep(i * 20).then(() => {
-        progressArea.innerHTML = '<li class="row"><i class="fas fa-file-alt"></i><div class="content"><div class="details"><span class="name">' + file.name + ' - uploading</span><span class="percent">' + i + '%</span></div><div class="progress-bar"><div class="progress" style="width:' + i + '%"></div></div></div></li>';
+    function progressLoading(file, progressArea) {
+      progressArea.innerHTML = '<li class="row"><i class="fas fa-file-alt"></i><div class="content"><div class="details"><span class="name" id="uploadingName"></span><span class="percent" id="percentValue"></span></div><div class="progress-bar"><div class="progress" id="progressWidth" style="width:0%"></div></div></div></li>';
+      var uploadingName = document.getElementById("uploadingName");
+      var progressWidth = document.getElementById("progressWidth");
+      var percentValue = document.getElementById("percentValue");
+      var percVal;
+      for (let i = 1; i <= 100; i++) {
+        Utils.sleep(i * 20).then(() => {
+          percVal = i + "%";
+          uploadingName.innerHTML = file.name;
+          percentValue.innerHTML = percVal;
+          progressWidth.style.width = percVal;
+        });
+      }
+    }
+
+    function uploadedLoading(file, uploadedArea) {
+      let dim = "";
+      let size = file.size / 1024;
+      if (size <= 1024) {
+        dim = size + "KB";
+      } else {
+        size /= 1024;
+        dim = size + "MB";
+      }
+      Utils.sleep(2200).then(() => {
+        uploadedArea.innerHTML += '<li class="row"><div class="content"><i class="fas fa-file-alt"></i><div class="details"><span class="name">' + file.name + ' - uploaded</span><span class="size">' + dim + '</span></div></div><i class="fas fa-check"></i></li>';
+        progressArea.innerHTML = '';
       });
     }
-    let dim = "";
-    let size = file.size / 1024;
-    if (size <= 1024) {
-      dim = size + "KB";
-    } else {
-      size /= 1024;
-      dim = size + "MB";
-    }
-    Utils.sleep(2200).then(() => {
-      uploadedArea.innerHTML += '<li class="row"><div class="content"><i class="fas fa-file-alt"></i><div class="details"><span class="name">' + file.name + ' - uploaded</span><span class="size">' + dim + '</span></div></div><i class="fas fa-check"></i></li>';
-      progressArea.innerHTML = '';
-    });
+
+    App.files[GraphicsUpdater.numFiles++] = file;
+    progressLoading(file, progressArea);
+    uploadedLoading(file, uploadedArea);
   }
 }
 
 window.onload = () => {
-  App.load()
+  App.load();
   GraphicsUpdater.eventLoader();
 }
