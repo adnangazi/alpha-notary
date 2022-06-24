@@ -2160,3 +2160,11 @@ a {
 abbr {
 	text-decoration: none !important;
 }
+
+.liteModeMessage {
+	color: red;
+	margin: 0;
+	padding: 0;
+	font-size: 16px;
+	text-align: center;
+}

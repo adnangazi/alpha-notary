@@ -2,7 +2,6 @@ App = {
   files1: [],
   files2: [],
   files3: [],
-  contractDecisor: true,
   contracts: {},
 
   load: async () => {
@@ -10,33 +9,38 @@ App = {
       App.web3Provider = web3.currentProvider;
       web3 = new Web3(web3.currentProvider);
     } else {
-      window.alert("Please connect to Metamask!")
+      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea0, ["Please connect to Metamask!"], 0);
     }
     
     if (window.ethereum) {
-      window.web3 = new Web3(ethereum)
+      window.web3 = new Web3(ethereum);
       try {
-        await ethereum.enable()
-        web3.eth.sendTransaction({/* ... */ })
+        await ethereum.enable();
+        web3.eth.sendTransaction({/* ... */ });
       } catch (error) {
-        console.log('Non-Ethereum Blockchain operations ongoing...')
+        console.log('Non-Ethereum Blockchain operations ongoing...');
       }
     } else if (window.web3) {
-      App.web3Provider = web3.currentProvider
-      window.web3 = new Web3(web3.currentProvider)
-      web3.eth.sendTransaction({/* ... */ })
+      App.web3Provider = web3.currentProvider;
+      window.web3 = new Web3(web3.currentProvider);
+      web3.eth.sendTransaction({/* ... */ });
     } else {
-      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea0, ["Non-Ethereum browser detected. You should consider trying MetaMask!"], 0);
     }
 
     App.account = web3.eth.accounts[0];
-    document.getElementById('account').innerHTML = App.account;
+    if (App.account != undefined) {
+      document.getElementById('account').innerHTML = App.account;
+    } else {
+      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea0, ["Error getting account ID: MetMask account is not connected!"], 0);
+    }
+
     await web3.eth.getBalance(App.account, function(error, result){ 
       if(!error) {
         const walletValue = parseInt(result, 10) / 10 ** 18;
         document.getElementById('walletBase').innerHTML = walletValue + " Coin" + (walletValue != 1 && walletValue != 0 ? "s" : "");
       } else {
-        console.error(error);
+        GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea0, ["Error getting wallet base: " + error + "!"], 0);
       }
     })
 
@@ -46,11 +50,12 @@ App = {
     App.contracts.Notary.setProvider(App.web3Provider);
     App.notarization = await App.contracts.Notarization.deployed();
     App.notary= await App.contracts.Notary.deployed();
-    App.switchContract();
+    App.contract = App.notarization;
+    App.contractDecisor = false;
 
     web3.eth.defaultAccount = web3.eth.accounts[0];
 
-    App.monitoring();
+    //App.monitoring();
   },
 
   uploadDocument: async () => {
@@ -137,6 +142,8 @@ App = {
   switchContract: async() => {
     App.contract = App.contractDecisor ? App.notarization : App.notary;
     App.contractDecisor = !App.contractDecisor;
+    GraphicsUpdater.liteModeMessage();
+    GraphicsUpdater.liteModeSwitcher();
   }
 }
 
@@ -207,13 +214,19 @@ GraphicsUpdater = {
   numFiles3: 0,
   nameNow: document.getElementById("nameNow"),
   commentsNow: document.getElementById("commentsNow"),
-  notifyArea1: document.querySelectorAll(".notification")[0],
-  notifyArea2: document.querySelectorAll(".notification")[1],
-  notifyArea3: document.querySelectorAll(".notification")[2],
+  notifyArea0: document.querySelectorAll(".notification")[0],
+  notifyArea1: document.querySelectorAll(".notification")[1],
+  notifyArea2: document.querySelectorAll(".notification")[2],
+  notifyArea3: document.querySelectorAll(".notification")[3],
+  image0: "assets/img/material/vectorial/hero-img56.svg",
   image1: "assets/img/material/vectorial/intro-img.svg",
   image2: "assets/img/material/vectorial/hero-carousel-2.svg",
   image3: "assets/img/material/vectorial/features-5.svg",
   pastNotifyArea: null,
+  container1: document.querySelectorAll(".liteModeMessage")[0],
+  container2: document.querySelectorAll(".liteModeMessage")[1],
+  container3: document.querySelectorAll(".liteModeMessage")[2],
+  switcherLiteMode: document.getElementById("liteMode"),
 
   eventLoader: async () => {
     GraphicsUpdater.form1.addEventListener("click", async () => {
@@ -230,19 +243,19 @@ GraphicsUpdater = {
 
     GraphicsUpdater.fileInput1.onchange = async ({target}) => {
       if (target.files[0] != undefined) {
-        GraphicsUpdater.animationUploading(target.files[0], GraphicsUpdater.progressArea1, GraphicsUpdater.uploadedArea1, GraphicsUpdater.numFiles1++);
+        GraphicsUpdater.animationUploading(target.files[0], App.files1, GraphicsUpdater.progressArea1, GraphicsUpdater.uploadedArea1, GraphicsUpdater.numFiles1++);
       }
     }
 
     GraphicsUpdater.fileInput2.onchange = async ({target}) => {
       if (target.files[0] != undefined) {
-        GraphicsUpdater.animationUploading(target.files[0], GraphicsUpdater.progressArea2, GraphicsUpdater.uploadedArea2, GraphicsUpdater.numFiles2++);
+        GraphicsUpdater.animationUploading(target.files[0], App.files2, GraphicsUpdater.progressArea2, GraphicsUpdater.uploadedArea2, GraphicsUpdater.numFiles2++);
       }
     }
 
     GraphicsUpdater.fileInput3.onchange = async ({target}) => {
       if (target.files[0] != undefined) {
-        GraphicsUpdater.animationUploading(target.files[0], GraphicsUpdater.progressArea3, GraphicsUpdater.uploadedArea3, GraphicsUpdater.numFiles3++);
+        GraphicsUpdater.animationUploading(target.files[0], App.files3, GraphicsUpdater.progressArea3, GraphicsUpdater.uploadedArea3, GraphicsUpdater.numFiles3++);
       }
     }
     
@@ -275,19 +288,19 @@ GraphicsUpdater = {
     
     GraphicsUpdater.form1.addEventListener("drop", async (event) => {
       event.preventDefault();
-      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], GraphicsUpdater.progressArea1, GraphicsUpdater.uploadedArea1, GraphicsUpdater.numFiles1++);
+      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], App.files1, GraphicsUpdater.progressArea1, GraphicsUpdater.uploadedArea1, GraphicsUpdater.numFiles1++);
       GraphicsUpdater.closeDrag(GraphicsUpdater.form1, GraphicsUpdater.dragText1);
     });
     
     GraphicsUpdater.form2.addEventListener("drop", async (event) => {
       event.preventDefault();
-      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], GraphicsUpdater.progressArea2, GraphicsUpdater.uploadedArea2, GraphicsUpdater.numFiles2++);
+      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], App.files2, GraphicsUpdater.progressArea2, GraphicsUpdater.uploadedArea2, GraphicsUpdater.numFiles2++);
       GraphicsUpdater.closeDrag(GraphicsUpdater.form2, GraphicsUpdater.dragText2);
     });
     
     GraphicsUpdater.form3.addEventListener("drop", async (event) => {
       event.preventDefault();
-      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], GraphicsUpdater.progressArea3, GraphicsUpdater.uploadedArea3, GraphicsUpdater.numFiles3++);
+      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], App.files3, GraphicsUpdater.progressArea3, GraphicsUpdater.uploadedArea3, GraphicsUpdater.numFiles3++);
       GraphicsUpdater.closeDrag(GraphicsUpdater.form3, GraphicsUpdater.dragText3);
     });
   },
@@ -327,6 +340,21 @@ GraphicsUpdater = {
     App.files3 = [];
   },
 
+  liteModeMessage: async () => {
+    var message = App.contractDecisor ? '<b>* take care that AlphaDApp is currently on lite-mode, so you will not be able to monitor your transactions!</b>' : '';
+    GraphicsUpdater.container1.innerHTML = message;
+    GraphicsUpdater.container2.innerHTML = message;
+    GraphicsUpdater.container3.innerHTML = message;
+  },
+
+  liteModeSwitcher: async () => {
+    GraphicsUpdater.switcherLiteMode.title = App.contractDecisor ? 'Lite-mode on' : 'Lite-mode off';
+  },
+
+  darkModeSwitcher: async () => {
+    GraphicsUpdater.switcherdarkMode.title = GraphicsUpdater.darkDecisor ? 'Dark mode on' : 'Dark mode off';
+  },
+
   notifierGUI: async (notifyArea, toNotify, idOperation) => {
     if (GraphicsUpdater.pastNotifyArea != null) {
       GraphicsUpdater.pastNotifyArea.innerHTML = "";
@@ -348,6 +376,9 @@ GraphicsUpdater = {
     }
 
     switch (idOperation) {
+      case 0:
+        containerImage.src = GraphicsUpdater.image0;
+        break;
       case 1:
         containerImage.src = GraphicsUpdater.image1;
         break;
@@ -370,7 +401,7 @@ GraphicsUpdater = {
     window.scrollTo(0, notifyArea.offsetTop-250);
   },
 
-  animationUploading: async (file, progressArea, uploadedArea, numFiles) => {
+  animationUploading: async (file, files, progressArea, uploadedArea, numFiles) => {
     function progressLoading(file, progressArea) {
       progressArea.innerHTML = '<li class="row"><i class="fas fa-file-alt"></i><div class="content"><div class="details"><span class="name" id="uploadingName"></span><span class="percent" id="percentValue"></span></div><div class="progress-bar"><div class="progress" id="progressWidth" style="width:0%"></div></div></div></li>';
       var uploadingName = document.getElementById("uploadingName");
@@ -402,7 +433,7 @@ GraphicsUpdater = {
       });
     }
 
-    App.files[numFiles] = file;
+    files[numFiles] = file;
     progressLoading(file, progressArea);
     uploadedLoading(file, uploadedArea);
   }
