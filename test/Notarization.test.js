@@ -16,7 +16,6 @@ contract("NOTARIZATION", (accounts) => {
   it("DEPLOY", async () => {
     assert.equal(await this.notarization.getDocumentCount(), 1);
     assert.equal(await this.notarization.getInteractionCount(), 0);
-    assert.equal(await this.notarization.getEmptyAddress(), emptyAddress);
     
     var emptyDocument = await this.notarization.getEmptyDocument();
     assert.equal(emptyDocument[0], "");
@@ -29,7 +28,7 @@ contract("NOTARIZATION", (accounts) => {
   });
 
   it("UPLOAD", async () => {
-    await this.notarization.upload(document1Name, document1Hash, document1Comments);
+    await this.notarization.upload(document1Name, document1Hash, document1Comments, true);
     var attualDate = new Date(0);
     assert(attualDate.setUTCSeconds(await this.notarization.getCurrentDocumentDate()) <= Date.now());
     assert.equal(await this.notarization.getUpdateStatus(), false);
@@ -46,7 +45,7 @@ contract("NOTARIZATION", (accounts) => {
     assert.equal(doc[4], this.owner);
     assert.equal(doc[5], true);
 
-    await this.notarization.upload(document2Name, document1Hash, document2Comments);
+    await this.notarization.upload(document2Name, document1Hash, document2Comments, false);
     assert.equal(await this.notarization.getUpdateStatus(), true);
     var interaction = await this.notarization.getInteraction(await this.notarization.getInteractionCount() - 1);
     assert.equal(await this.notarization.getUpdateStatus(), true);
@@ -65,8 +64,8 @@ contract("NOTARIZATION", (accounts) => {
   });
 
   it("CHECK", async () => {
-    await this.notarization.check(document1Hash);
-    var doc = await this.notarization.getDocument(await this.notarization.search(document1Hash));
+    await this.notarization.check(document1Hash, false);
+    var doc = await this.notarization.getDocument(document1Hash);
     assert.equal(doc[0], document2Name);
     var attualDate = new Date(0);
     assert(attualDate.setUTCSeconds(doc[1]) <= Date.now());
@@ -96,7 +95,7 @@ contract("NOTARIZATION", (accounts) => {
     assert.equal(interaction[8], this.owner);
     assert.equal(interaction[9], true);
 
-    await this.notarization.check(document2Hash);
+    await this.notarization.check(document2Hash, true);
     doc = await this.notarization.getDocument(await this.notarization.search(document2Hash));
     assert.equal(doc[0], "");
     attualDate = new Date(0);
@@ -115,7 +114,7 @@ contract("NOTARIZATION", (accounts) => {
   });
 
   it("REMOVE", async () => {
-    await this.notarization.remove(document1Hash);
+    await this.notarization.remove(document1Hash, false);
     var doc = await this.notarization.getDocument(await this.notarization.search(document1Hash));
     assert.equal(doc[0], "");
     var attualDate = new Date(0);
@@ -147,7 +146,7 @@ contract("NOTARIZATION", (accounts) => {
     assert.equal(interaction[8], this.owner);
     assert.equal(interaction[9], false);
 
-    await this.notarization.remove(document2Hash);
+    await this.notarization.remove(document2Hash, true);
     doc = await this.notarization.getDocument(await this.notarization.search(document2Hash));
     assert.equal(doc[0], "");
     attualDate = new Date(0);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 	<head>
 		<meta charset="utf-8">
 		<meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -24,9 +24,15 @@
 				</div>
 				<nav id="navbar" class="navbar">
 					<ul>
-						<li class="getStartedLi" data-aos="fade-down" data-aos-delay="50"><a class="getstarted" href="/">Home</a></li>
+						<li data-aos="fade-down" class="toggleCheck" data-aos-delay="100">
+							<label class="switch" id="darkMode" title="Dark mode off">
+								<input type="checkbox" onclick="Animations.darkModeSwitcher()">
+								<span class="slider round"></span>
+							</label>
+						</li>
+						<li class="getStartedLi" data-aos="fade-down" data-aos-delay="150"><a class="getstarted" href="/">Home</a></li>
 						<li></li>
-						<li class="getStartedLi" data-aos="fade-down" data-aos-delay="100"><a class="getstarted" href="notarization.html">Notarization</a></li>
+						<li class="getStartedLi" data-aos="fade-down" data-aos-delay="200"><a class="getstarted" href="notarization.html">Notarization</a></li>
 					</ul>
 					<i class="bi bi-list mobile-nav-toggle"></i>
 				</nav>
@@ -126,5 +132,9 @@
 		<script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
 		<script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
 		<script src="assets/js/main.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="vendor/web3/dist/web3.js"></script>
+		<script src="vendor/truffle-contract/dist/truffle-contract.js"></script>
+		<script src="assets/js/app.js"></script>
 	</body>
 </html>

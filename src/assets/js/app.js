@@ -1,152 +1,3 @@
-App = {
-  files1: [],
-  files2: [],
-  files3: [],
-  contracts: {},
-
-  load: async () => {
-    if (typeof web3 !== 'undefined') {
-      App.web3Provider = web3.currentProvider;
-      web3 = new Web3(web3.currentProvider);
-    } else {
-      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea0, ["Please connect to Metamask!"], 0);
-    }
-    
-    if (window.ethereum) {
-      window.web3 = new Web3(ethereum);
-      try {
-        await ethereum.enable();
-        web3.eth.sendTransaction({/* ... */ });
-      } catch (error) {
-        console.log('Non-Ethereum Blockchain operations ongoing...');
-      }
-    } else if (window.web3) {
-      App.web3Provider = web3.currentProvider;
-      window.web3 = new Web3(web3.currentProvider);
-      web3.eth.sendTransaction({/* ... */ });
-    } else {
-      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea0, ["Non-Ethereum browser detected. You should consider trying MetaMask!"], 0);
-    }
-
-    App.account = web3.eth.accounts[0];
-    if (App.account != undefined) {
-      document.getElementById('account').innerHTML = App.account;
-    } else {
-      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea0, ["Error getting account ID: MetMask account is not connected!"], 0);
-    }
-
-    await web3.eth.getBalance(App.account, function(error, result){ 
-      if(!error) {
-        const walletValue = parseInt(result, 10) / 10 ** 18;
-        document.getElementById('walletBase').innerHTML = walletValue + " Coin" + (walletValue != 1 && walletValue != 0 ? "s" : "");
-      } else {
-        GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea0, ["Error getting wallet base: " + error + "!"], 0);
-      }
-    })
-
-    App.contracts.Notarization = TruffleContract(await $.getJSON('Notarization.json'));
-    App.contracts.Notary = TruffleContract(await $.getJSON('Notary.json'));
-    App.contracts.Notarization.setProvider(App.web3Provider);
-    App.contracts.Notary.setProvider(App.web3Provider);
-    App.notarization = await App.contracts.Notarization.deployed();
-    App.notary= await App.contracts.Notary.deployed();
-    App.contract = App.notarization;
-    App.contractDecisor = false;
-
-    web3.eth.defaultAccount = web3.eth.accounts[0];
-
-    //App.monitoring();
-  },
-
-  uploadDocument: async () => {
-    if (App.files1.length > 0 && GraphicsUpdater.nameNow != "") {
-      await Utils.createHash(App.files1)
-        .then(async function (hash) {
-          var n = GraphicsUpdater.nameNow.value;
-          var c = GraphicsUpdater.commentsNow.value;
-          await App.contract.upload(n, hash, c);
-          GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea1, ["The document have been " + (await App.contract.getUpdateStatus() ? "updated" : "uploaded") + " correctly!", "Name", n, "Comments", c, "Date", Utils.epochConverter(await App.contract.getCurrentDocumentDate()), "Hash", hash, "Owner", await App.contract.getCurrentDocumentOwner()], 1);
-          
-          GraphicsUpdater.resetLine(GraphicsUpdater.nameNow);
-          GraphicsUpdater.resetLine(GraphicsUpdater.commentsNow);
-          GraphicsUpdater.resetArea(GraphicsUpdater.progressArea1);
-          GraphicsUpdater.resetArea(GraphicsUpdater.uploadedArea1);
-          GraphicsUpdater.resetFiles1();
-          App.insertInteraction();
-        })
-        .catch(function (err) {
-          console.error(err);
-        });
-    } else if (GraphicsUpdater.nameNow == "") {
-      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea1, ["Empty name found!"], 1);
-    } else {
-      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea1, ["No document found!"], 1);
-    }
-  },
-
-  checkDocument: async () => {
-    if (App.files2.length > 0) {
-      await Utils.createHash(App.files2)
-        .then(async function (hash) {
-          await App.contract.check(hash);
-          var n = await App.contract.getCurrentDocumentName();
-          GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea2, ["The document have " + (n == "" ? "not " : "") + " been found!", "Name", n, "Comments", await App.contract.getCurrentDocumentComments(), "Date", Utils.epochConverter(await App.contract.getCurrentDocumentDate()), "Hash", hash, "Owner", await App.contract.getCurrentDocumentOwner()], 2);
-          
-          GraphicsUpdater.resetArea(GraphicsUpdater.progressArea2);
-          GraphicsUpdater.resetArea(GraphicsUpdater.uploadedArea2);
-          GraphicsUpdater.resetFiles2();
-          App.insertInteraction();
-        })
-        .catch(function (err) {
-          console.error(err);
-        });
-    } else {
-      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea2, ["No document found!"], 2);
-    }
-  },
-
-  removeDocument: async () => {
-    if (App.files3.length > 0) {
-      await Utils.createHash(App.files3)
-        .then(async function (hash) {
-          await App.contract.remove(hash);
-          GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea3, ["The document have " + (await App.contract.getRemoveStatus() ? "" : "not ") + " been removed correctly!", "Name", await App.contract.getCurrentDocumentName(), "Comments", await App.contract.getCurrentDocumentComments(), "Date", Utils.epochConverter(await App.contract.getCurrentDocumentDate()), "Hash", hash, "Owner", await App.contract.getCurrentDocumentOwner()], 3);
-          
-          GraphicsUpdater.resetArea(GraphicsUpdater.progressArea3);
-          GraphicsUpdater.resetArea(GraphicsUpdater.uploadedArea3);
-          GraphicsUpdater.resetFiles3();
-          App.insertInteraction();
-        })
-        .catch(function (err) {
-          console.error(err);
-        });
-    } else {
-      GraphicsUpdater.notifierGUI(GraphicsUpdater.notifyArea3, ["No document found!"], 3);
-    }
-  },
-
-  monitoring: async () => {
-    var documents = await App.contract.getDocumentCount();
-    var interactions = await App.contract.getInteractionCount();
-    for (var d = 1; d < documents; d++) {
-      console.log(await App.contract.documentMapping(d));
-    }
-    for (var i = 0; i < interactions; i++) {
-      console.log(await App.contract.interactionMapping(i));
-    }
-  },
-
-  insertInteraction: async () => {
-  },
-
-  switchContract: async() => {
-    App.contract = App.contractDecisor ? App.notarization : App.notary;
-    App.contractDecisor = !App.contractDecisor;
-    GraphicsUpdater.liteModeMessage();
-    GraphicsUpdater.liteModeSwitcher();
-  }
-}
-
 Utils = {
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -159,15 +10,12 @@ Utils = {
 
   createHash: (files) => {
     function toHex(buffer) {
-      var i, n, k, value, stringValue, padding, paddedValue;
+      var padding;
       var hexCodes = [];
       var view = new DataView(buffer);
-      for (i = 0, n = view.byteLength, k = Uint32Array.BYTES_PER_ELEMENT; i < n; i += k) {
-        value = view.getUint32(i);
-        stringValue = value.toString(16);
+      for (var i = 0, n = view.byteLength, k = Uint32Array.BYTES_PER_ELEMENT; i < n; i += k) {
         padding = '00000000';
-        paddedValue = (padding + stringValue).slice(-padding.length);
-        hexCodes.push(paddedValue);
+        hexCodes.push((padding + (view.getUint32(i)).toString(16)).slice(-padding.length));
       }
       var hash = hexCodes.join('');
       if (hash.substring(0, 2) !== '0x') {
@@ -193,7 +41,7 @@ Utils = {
   }
 }
 
-GraphicsUpdater = {
+View = {
   form1: document.querySelectorAll(".form")[0],
   dragText1: document.querySelectorAll(".dragText")[0],
   fileInput1: document.querySelectorAll(".file-input")[0],
@@ -212,6 +60,9 @@ GraphicsUpdater = {
   numFiles1: 0,
   numFiles2: 0,
   numFiles3: 0,
+  files1: [],
+  files2: [],
+  files3: [],
   nameNow: document.getElementById("nameNow"),
   commentsNow: document.getElementById("commentsNow"),
   notifyArea0: document.querySelectorAll(".notification")[0],
@@ -229,79 +80,79 @@ GraphicsUpdater = {
   switcherLiteMode: document.getElementById("liteMode"),
 
   eventLoader: async () => {
-    GraphicsUpdater.form1.addEventListener("click", async () => {
-      GraphicsUpdater.fileInput1.click();
+    View.form1.addEventListener("click", async () => {
+      View.fileInput1.click();
     });
 
-    GraphicsUpdater.form2.addEventListener("click", async () => {
-      GraphicsUpdater.fileInput2.click();
+    View.form2.addEventListener("click", async () => {
+      View.fileInput2.click();
     });
 
-    GraphicsUpdater.form3.addEventListener("click", async () => {
-      GraphicsUpdater.fileInput3.click();
+    View.form3.addEventListener("click", async () => {
+      View.fileInput3.click();
     });
 
-    GraphicsUpdater.fileInput1.onchange = async ({target}) => {
+    View.fileInput1.onchange = async ({target}) => {
       if (target.files[0] != undefined) {
-        GraphicsUpdater.animationUploading(target.files[0], App.files1, GraphicsUpdater.progressArea1, GraphicsUpdater.uploadedArea1, GraphicsUpdater.numFiles1++);
+        View.animationUploading(target.files[0], View.files1, View.progressArea1, View.uploadedArea1, View.numFiles1++);
       }
     }
 
-    GraphicsUpdater.fileInput2.onchange = async ({target}) => {
+    View.fileInput2.onchange = async ({target}) => {
       if (target.files[0] != undefined) {
-        GraphicsUpdater.animationUploading(target.files[0], App.files2, GraphicsUpdater.progressArea2, GraphicsUpdater.uploadedArea2, GraphicsUpdater.numFiles2++);
+        View.animationUploading(target.files[0], View.files2, View.progressArea2, View.uploadedArea2, View.numFiles2++);
       }
     }
 
-    GraphicsUpdater.fileInput3.onchange = async ({target}) => {
+    View.fileInput3.onchange = async ({target}) => {
       if (target.files[0] != undefined) {
-        GraphicsUpdater.animationUploading(target.files[0], App.files3, GraphicsUpdater.progressArea3, GraphicsUpdater.uploadedArea3, GraphicsUpdater.numFiles3++);
+        View.animationUploading(target.files[0], View.files3, View.progressArea3, View.uploadedArea3, View.numFiles3++);
       }
     }
     
-    GraphicsUpdater.form1.addEventListener("dragover", async (event) => {
+    View.form1.addEventListener("dragover", async (event) => {
       event.preventDefault();
-      GraphicsUpdater.openDrag(GraphicsUpdater.form1, GraphicsUpdater.dragText1);
+      View.openDrag(View.form1, View.dragText1);
     });
     
-    GraphicsUpdater.form2.addEventListener("dragover", async (event) => {
+    View.form2.addEventListener("dragover", async (event) => {
       event.preventDefault();
-      GraphicsUpdater.openDrag(GraphicsUpdater.form2, GraphicsUpdater.dragText2);
+      View.openDrag(View.form2, View.dragText2);
     });
     
-    GraphicsUpdater.form3.addEventListener("dragover", async (event) => {
+    View.form3.addEventListener("dragover", async (event) => {
       event.preventDefault();
-      GraphicsUpdater.openDrag(GraphicsUpdater.form3, GraphicsUpdater.dragText3);
+      View.openDrag(View.form3, View.dragText3);
     });
     
-    GraphicsUpdater.form1.addEventListener("dragleave", async () => {
-      GraphicsUpdater.closeDrag(GraphicsUpdater.form1, GraphicsUpdater.dragText1);
+    View.form1.addEventListener("dragleave", async () => {
+      View.closeDrag(View.form1, View.dragText1);
     });
     
-    GraphicsUpdater.form2.addEventListener("dragleave", async () => {
-      GraphicsUpdater.closeDrag(GraphicsUpdater.form2, GraphicsUpdater.dragText2);
+    View.form2.addEventListener("dragleave", async () => {
+      View.closeDrag(View.form2, View.dragText2);
     });
     
-    GraphicsUpdater.form3.addEventListener("dragleave", async () => {
-      GraphicsUpdater.closeDrag(GraphicsUpdater.form3, GraphicsUpdater.dragText3);
+    View.form3.addEventListener("dragleave", async () => {
+      View.closeDrag(View.form3, View.dragText3);
     });
     
-    GraphicsUpdater.form1.addEventListener("drop", async (event) => {
+    View.form1.addEventListener("drop", async (event) => {
       event.preventDefault();
-      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], App.files1, GraphicsUpdater.progressArea1, GraphicsUpdater.uploadedArea1, GraphicsUpdater.numFiles1++);
-      GraphicsUpdater.closeDrag(GraphicsUpdater.form1, GraphicsUpdater.dragText1);
+      View.animationUploading(event.dataTransfer.files[0], View.files1, View.progressArea1, View.uploadedArea1, View.numFiles1++);
+      View.closeDrag(View.form1, View.dragText1);
     });
     
-    GraphicsUpdater.form2.addEventListener("drop", async (event) => {
+    View.form2.addEventListener("drop", async (event) => {
       event.preventDefault();
-      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], App.files2, GraphicsUpdater.progressArea2, GraphicsUpdater.uploadedArea2, GraphicsUpdater.numFiles2++);
-      GraphicsUpdater.closeDrag(GraphicsUpdater.form2, GraphicsUpdater.dragText2);
+      View.animationUploading(event.dataTransfer.files[0], View.files2, View.progressArea2, View.uploadedArea2, View.numFiles2++);
+      View.closeDrag(View.form2, View.dragText2);
     });
     
-    GraphicsUpdater.form3.addEventListener("drop", async (event) => {
+    View.form3.addEventListener("drop", async (event) => {
       event.preventDefault();
-      GraphicsUpdater.animationUploading(event.dataTransfer.files[0], App.files3, GraphicsUpdater.progressArea3, GraphicsUpdater.uploadedArea3, GraphicsUpdater.numFiles3++);
-      GraphicsUpdater.closeDrag(GraphicsUpdater.form3, GraphicsUpdater.dragText3);
+      View.animationUploading(event.dataTransfer.files[0], View.files3, View.progressArea3, View.uploadedArea3, View.numFiles3++);
+      View.closeDrag(View.form3, View.dragText3);
     });
   },
 
@@ -326,40 +177,36 @@ GraphicsUpdater = {
   },
 
   resetFiles1: async () => {
-    GraphicsUpdater.numFiles1 = 0;
-    App.files1 = [];
+    View.numFiles1 = 0;
+    View.files1 = [];
   },
 
   resetFiles2: async () => {
-    GraphicsUpdater.numFiles2 = 0;
-    App.files2 = [];
+    View.numFiles2 = 0;
+    View.files2 = [];
   },
 
   resetFiles3: async () => {
-    GraphicsUpdater.numFiles3 = 0;
-    App.files3 = [];
+    View.numFiles3 = 0;
+    View.files3 = [];
   },
 
   liteModeMessage: async () => {
-    var message = App.contractDecisor ? '<b>* take care that AlphaDApp is currently on lite-mode, so you will not be able to monitor your transactions!</b>' : '';
-    GraphicsUpdater.container1.innerHTML = message;
-    GraphicsUpdater.container2.innerHTML = message;
-    GraphicsUpdater.container3.innerHTML = message;
+    var message = Controller.contractDecisor ? '<b>* take care that AlphaDApp is currently on lite-mode, so you will not be able to monitor your transactions!</b>' : '';
+    View.container1.innerHTML = message;
+    View.container2.innerHTML = message;
+    View.container3.innerHTML = message;
   },
 
   liteModeSwitcher: async () => {
-    GraphicsUpdater.switcherLiteMode.title = App.contractDecisor ? 'Lite-mode on' : 'Lite-mode off';
-  },
-
-  darkModeSwitcher: async () => {
-    GraphicsUpdater.switcherdarkMode.title = GraphicsUpdater.darkDecisor ? 'Dark mode on' : 'Dark mode off';
+    View.switcherLiteMode.title = Controller.contractDecisor ? 'Lite-mode on' : 'Lite-mode off';
   },
 
   notifierGUI: async (notifyArea, toNotify, idOperation) => {
-    if (GraphicsUpdater.pastNotifyArea != null) {
-      GraphicsUpdater.pastNotifyArea.innerHTML = "";
+    if (View.pastNotifyArea != null) {
+      View.pastNotifyArea.innerHTML = "";
     }
-    GraphicsUpdater.pastNotifyArea = notifyArea;
+    View.pastNotifyArea = notifyArea;
 
     notifyArea.innerHTML = '<div class="banner"><header id="section-header"><h2 data-aos="fade-up">Notification</h2><p data-aos="fade-up" data-aos-delay="100">View your transaction</p></header><div class="container" data-aos="fade-up" data-aos-delay="200"><div id="containerID" class="row g-5"></div></div></div>';
     var containerID = document.getElementById("containerID");
@@ -377,16 +224,16 @@ GraphicsUpdater = {
 
     switch (idOperation) {
       case 0:
-        containerImage.src = GraphicsUpdater.image0;
+        containerImage.src = View.image0;
         break;
       case 1:
-        containerImage.src = GraphicsUpdater.image1;
+        containerImage.src = View.image1;
         break;
       case 2:
-        containerImage.src = GraphicsUpdater.image2;
+        containerImage.src = View.image2;
         break;
       default:
-        containerImage.src = GraphicsUpdater.image3;
+        containerImage.src = View.image3;
     }
 
     containerLines.innerHTML = '<b>' + toNotify[0] + '</b>';
@@ -439,7 +286,148 @@ GraphicsUpdater = {
   }
 }
 
-window.onload = () => {
-  App.load();
-  GraphicsUpdater.eventLoader();
+Controller = {
+  contracts: {},
+
+  load: async () => {
+    if (typeof web3 !== 'undefined') {
+      Controller.web3Provider = web3.currentProvider;
+      web3 = new Web3(web3.currentProvider);
+    } else {
+      View.notifierGUI(View.notifyArea0, ["Please connect to Metamask!"], 0);
+    }
+    
+    if (window.ethereum) {
+      window.web3 = new Web3(ethereum);
+      try {
+        await ethereum.enable();
+        web3.eth.sendTransaction({/* ... */ });
+      } catch (error) {
+        console.log('Non-Ethereum Blockchain operations ongoing...');
+      }
+    } else if (window.web3) {
+      Controller.web3Provider = web3.currentProvider;
+      window.web3 = new Web3(web3.currentProvider);
+      web3.eth.sendTransaction({/* ... */ });
+    } else {
+      View.notifierGUI(View.notifyArea0, ["Non-Ethereum browser detected. You should consider trying MetaMask!"], 0);
+    }
+
+    Controller.account = web3.eth.accounts[0];
+    if (Controller.account != undefined) {
+      document.getElementById('account').innerHTML = Controller.account;
+    } else {
+      View.notifierGUI(View.notifyArea0, ["Error getting account ID: MetMask account is not connected!"], 0);
+    }
+
+    await web3.eth.getBalance(Controller.account, function(error, result){ 
+      if (!error) {
+        const walletValue = parseInt(result, 10) / 10 ** 18;
+        document.getElementById('walletBase').innerHTML = walletValue + " Coin" + (walletValue != 1 && walletValue != 0 ? "s" : "");
+      } else {
+        View.notifierGUI(View.notifyArea0, ["Error getting wallet base: " + error + "!"], 0);
+      }
+    })
+
+    Controller.contracts.Notarization = TruffleContract(await $.getJSON('Notarization.json'));
+    Controller.contracts.Notarization.setProvider(Controller.web3Provider);
+    Controller.notarization = await Controller.contracts.Notarization.deployed();
+    Controller.contractDecisor = false;
+
+    web3.eth.defaultAccount = web3.eth.accounts[0];
+
+    //Controller.monitoring();
+  },
+
+  uploadDocument: async () => {
+    if (View.files1.length > 0 && View.nameNow != "") {
+      await Utils.createHash(View.files1)
+        .then(async function (hash) {
+          var n = View.nameNow.value;
+          var c = View.commentsNow.value;
+          await Controller.notarization.upload(n, hash, c, Controller.contractDecisor);
+          View.notifierGUI(View.notifyArea1, ["The document have been " + (await Controller.notarization.getUpdateStatus() ? "updated" : "uploaded") + " correctly!", "Name", n, "Comments", c, "Date", Utils.epochConverter(await Controller.notarization.getCurrentDocumentDate()), "Hash", hash, "Owner", await Controller.notarization.getCurrentDocumentOwner()], 1);
+          
+          View.resetLine(View.nameNow);
+          View.resetLine(View.commentsNow);
+          View.resetArea(View.progressArea1);
+          View.resetArea(View.uploadedArea1);
+          View.resetFiles1();
+          Controller.insertInteraction();
+        })
+        .catch(function (err) {
+          console.error(err);
+        });
+    } else if (View.nameNow == "") {
+      View.notifierGUI(View.notifyArea1, ["Empty name found!"], 1);
+    } else {
+      View.notifierGUI(View.notifyArea1, ["No document found!"], 1);
+    }
+  },
+
+  checkDocument: async () => {
+    if (View.files2.length > 0) {
+      await Utils.createHash(View.files2)
+        .then(async function (hash) {
+          await Controller.notarization.check(hash, Controller.contractDecisor);
+          var n = await Controller.notarization.getCurrentDocumentName();
+          View.notifierGUI(View.notifyArea2, ["The document have " + (n == "" ? "not " : "") + " been found!", "Name", n, "Comments", await Controller.notarization.getCurrentDocumentComments(), "Date", Utils.epochConverter(await Controller.notarization.getCurrentDocumentDate()), "Hash", hash, "Owner", await Controller.notarization.getCurrentDocumentOwner()], 2);
+          
+          View.resetArea(View.progressArea2);
+          View.resetArea(View.uploadedArea2);
+          View.resetFiles2();
+          Controller.insertInteraction();
+        })
+        .catch(function (err) {
+          console.error(err);
+        });
+    } else {
+      View.notifierGUI(View.notifyArea2, ["No document found!"], 2);
+    }
+  },
+
+  removeDocument: async () => {
+    if (View.files3.length > 0) {
+      await Utils.createHash(View.files3)
+        .then(async function (hash) {
+          await Controller.notarization.remove(hash, Controller.contractDecisor);
+          View.notifierGUI(View.notifyArea3, ["The document have " + (await Controller.notarization.getRemoveStatus() ? "" : "not ") + " been removed correctly!", "Name", await Controller.notarization.getCurrentDocumentName(), "Comments", await Controller.notarization.getCurrentDocumentComments(), "Date", Utils.epochConverter(await Controller.notarization.getCurrentDocumentDate()), "Hash", hash, "Owner", await Controller.notarization.getCurrentDocumentOwner()], 3);
+          
+          View.resetArea(View.progressArea3);
+          View.resetArea(View.uploadedArea3);
+          View.resetFiles3();
+          Controller.insertInteraction();
+        })
+        .catch(function (err) {
+          console.error(err);
+        });
+    } else {
+      View.notifierGUI(View.notifyArea3, ["No document found!"], 3);
+    }
+  },
+
+  monitoring: async () => {
+    var documents = await Controller.notarization.getDocumentCount();
+    var interactions = await Controller.notarization.getInteractionCount();
+    for (var d = 1; d < documents; d++) {
+      console.log(await Controller.notarization.documentMapping(d));
+    }
+    for (var i = 0; i < interactions; i++) {
+      console.log(await Controller.notarization.interactionMapping(i));
+    }
+  },
+
+  insertInteraction: async () => {
+  },
+
+  switchContract: async() => {
+    Controller.contractDecisor = !Controller.contractDecisor;
+    View.liteModeMessage();
+    View.liteModeSwitcher();
+  }
+}
+
+window.onload = async () => {
+  Controller.load();
+  View.eventLoader();
 }

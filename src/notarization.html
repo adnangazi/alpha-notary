@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 	<head>
 		<meta charset="utf-8">
 		<meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -26,14 +26,14 @@
 				<nav id="navbar" class="navbar">
 					<ul>
 						<li data-aos="fade-down" class="toggleCheck" data-aos-delay="100">
-							<label class="switch" id="darkMode">
-								<input type="checkbox">
+							<label class="switch" id="darkMode" title="Dark mode off">
+								<input type="checkbox" onclick="Animations.darkModeSwitcher()">
 								<span class="slider round"></span>
 							</label>
 						</li>
 						<li data-aos="fade-down" class="toggleCheck inverted" data-aos-delay="150">
 							<label class="switch" id="liteMode" title="Lite-mode off">
-								<input type="checkbox" onclick="App.switchContract()">
+								<input type="checkbox" onclick="Controller.switchContract()">
 								<span class="slider round"></span>
 							</label>
 						</li>
@@ -185,7 +185,7 @@
 						<input data-aos="fade-up" data-aos-delay="200" type="text" placeholder="Subject" id="nameNow">
 						<label data-aos="fade-up" data-aos-delay="250">Document comments</label>
 						<textarea data-aos="fade-up" data-aos-delay="300" cols="30" rows="7" placeholder="Message" id="commentsNow"></textarea>
-						<button data-aos="fade-up" data-aos-delay="350" type="button" class="formButton" onclick="App.uploadDocument()">Upload</button>
+						<button data-aos="fade-up" data-aos-delay="350" type="button" class="formButton" onclick="Controller.uploadDocument()">Upload</button>
 					</div>
 					<div class="liteModeMessage">
 					</div>
@@ -231,7 +231,7 @@
 					</div>
 					<div class="liteModeMessage">
 					</div>
-					<button data-aos="fade-up" data-aos-delay="250" type="button" class="formButton" onclick="App.checkDocument()">Check</button>
+					<button data-aos="fade-up" data-aos-delay="250" type="button" class="formButton" onclick="Controller.checkDocument()">Check</button>
 				</div>
 				<div class="notification">
 				</div>
@@ -274,7 +274,7 @@
 					</div>
 					<div class="liteModeMessage">
 					</div>
-					<button data-aos="fade-up" data-aos-delay="250" type="button" class="formButton" onclick="App.removeDocument()">Remove</button>
+					<button data-aos="fade-up" data-aos-delay="250" type="button" class="formButton" onclick="Controller.removeDocument()">Remove</button>
 				</div>
 				<div class="notification">
 				</div>
@@ -287,7 +287,7 @@
 				<div class="container">
 					<div class="row gx-0">
 						<div class="col-lg-6 d-flex align-items-center crossBackgroundLeft" data-aos="zoom-out" data-aos-delay="400">
-							<img alt="Three people standed and seated analysing with a computer market values printed on the wall" src="assets/img/material/skills.png" class="img-fluid floating bottomSpace">
+							<img alt="Three people standed and seated analysing with a computer market values printed on the wall" src="assets/img/material/vectorial/counts-img.svg" class="img-fluid floating bottomSpace">
 						</div>
 						<div class=" col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
 							<div class="content">
