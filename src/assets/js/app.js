@@ -192,14 +192,14 @@ View = {
   },
 
   liteModeMessage: async () => {
-    var message = Controller.contractDecisor ? '<b>* take care that AlphaDApp is currently on lite-mode, so you will not be able to monitor your transactions!</b>' : '';
+    var message = Controller.contractDecisor ? '' : '<b>* take care that AlphaDApp is currently on lite-mode, so you will not be able to monitor your transactions!</b>';
     View.container1.innerHTML = message;
     View.container2.innerHTML = message;
     View.container3.innerHTML = message;
   },
 
   liteModeSwitcher: async () => {
-    View.switcherLiteMode.title = Controller.contractDecisor ? 'Lite-mode on' : 'Lite-mode off';
+    View.switcherLiteMode.title = Controller.contractDecisor ? 'Lite-mode off' : 'Lite-mode on';
   },
 
   notifierGUI: async (notifyArea, toNotify, idOperation) => {
@@ -332,7 +332,7 @@ Controller = {
     Controller.contracts.Notarization = TruffleContract(await $.getJSON('Notarization.json'));
     Controller.contracts.Notarization.setProvider(Controller.web3Provider);
     Controller.notarization = await Controller.contracts.Notarization.deployed();
-    Controller.contractDecisor = false;
+    Controller.contractDecisor = true;
 
     web3.eth.defaultAccount = web3.eth.accounts[0];
 
@@ -343,10 +343,28 @@ Controller = {
     if (View.files1.length > 0 && View.nameNow != "") {
       await Utils.createHash(View.files1)
         .then(async function (hash) {
-          var n = View.nameNow.value;
-          var c = View.commentsNow.value;
-          await Controller.notarization.upload(n, hash, c, Controller.contractDecisor);
-          View.notifierGUI(View.notifyArea1, ["The document have been " + (await Controller.notarization.getUpdateStatus() ? "updated" : "uploaded") + " correctly!", "Name", n, "Comments", c, "Date", Utils.epochConverter(await Controller.notarization.getCurrentDocumentDate()), "Hash", hash, "Owner", await Controller.notarization.getCurrentDocumentOwner()], 1);
+          var name = View.nameNow.value;
+          var comments = View.commentsNow.value;
+          var result = await Controller.notarization.upload(n, hash, c, Controller.contractDecisor);
+          var interaction = await Controller.notarization.getInteractionInfo(await Controller.notarization.getInteractionCount());
+          
+          var toStamp = [];
+          toStamp.push("The document have " + result == 3 ? "not " : "" + "been " + result != 2 ? "uploaded " : "updated " + "correctly");
+          toStamp.push("Name");
+          toStamp.push(name);
+          toStamp.push("Comments");
+          toStamp.push(comments);
+          toStamp.push("Hash");
+          toStamp.push(hash);
+
+          if (result != 3 && Controller.contractDecisor) {
+            toStamp.push("Date");
+            toStamp.push(interaction[4]);
+            toStamp.push("Owner");
+            toStamp.push(hash);
+          }
+
+          View.notifierGUI(View.notifyArea1, toStamp, 1);
           
           View.resetLine(View.nameNow);
           View.resetLine(View.commentsNow);
@@ -369,9 +387,27 @@ Controller = {
     if (View.files2.length > 0) {
       await Utils.createHash(View.files2)
         .then(async function (hash) {
-          await Controller.notarization.check(hash, Controller.contractDecisor);
-          var n = await Controller.notarization.getCurrentDocumentName();
-          View.notifierGUI(View.notifyArea2, ["The document have " + (n == "" ? "not " : "") + " been found!", "Name", n, "Comments", await Controller.notarization.getCurrentDocumentComments(), "Date", Utils.epochConverter(await Controller.notarization.getCurrentDocumentDate()), "Hash", hash, "Owner", await Controller.notarization.getCurrentDocumentOwner()], 2);
+          var result = await Controller.notarization.check(hash, Controller.contractDecisor);
+          var interaction = await Controller.notarization.getInteractionInfo(await Controller.notarization.getInteractionCount());
+          
+          var toStamp = [];
+          toStamp.push("The document have " + result != 1 ? "not " : "" + "been found" + result == 3 ? ", because of error during the operation!" : "!");
+
+          if (result != 3 && Controller.contractDecisor) {
+            toStamp.push("Name");
+            toStamp.push(interaction[3]);
+            toStamp.push("Comments");
+            toStamp.push(interaction[5]);
+            toStamp.push("Date");
+            toStamp.push(interaction[4]);
+            toStamp.push("Owner");
+            toStamp.push(interaction[6]);
+          }
+
+          toStamp.push("Hash");
+          toStamp.push(hash);
+
+          View.notifierGUI(View.notifyArea2, toStamp, 2);
           
           View.resetArea(View.progressArea2);
           View.resetArea(View.uploadedArea2);
@@ -390,8 +426,27 @@ Controller = {
     if (View.files3.length > 0) {
       await Utils.createHash(View.files3)
         .then(async function (hash) {
-          await Controller.notarization.remove(hash, Controller.contractDecisor);
-          View.notifierGUI(View.notifyArea3, ["The document have " + (await Controller.notarization.getRemoveStatus() ? "" : "not ") + " been removed correctly!", "Name", await Controller.notarization.getCurrentDocumentName(), "Comments", await Controller.notarization.getCurrentDocumentComments(), "Date", Utils.epochConverter(await Controller.notarization.getCurrentDocumentDate()), "Hash", hash, "Owner", await Controller.notarization.getCurrentDocumentOwner()], 3);
+          var result = await Controller.notarization.check(hash, Controller.contractDecisor);
+          var interaction = await Controller.notarization.getInteractionInfo(await Controller.notarization.getInteractionCount());
+          
+          var toStamp = [];
+          toStamp.push("The document have " + result != 1 ? "not " : "" + "been removed" + result == 3 ? ", because of error during the operation!" : "!");
+
+          if (result != 3 && Controller.contractDecisor) {
+            toStamp.push("Name");
+            toStamp.push(interaction[3]);
+            toStamp.push("Comments");
+            toStamp.push(interaction[5]);
+            toStamp.push("Date");
+            toStamp.push(interaction[4]);
+            toStamp.push("Owner");
+            toStamp.push(interaction[6]);
+          }
+
+          toStamp.push("Hash");
+          toStamp.push(hash);
+
+          View.notifierGUI(View.notifyArea3, toStamp, 3);
           
           View.resetArea(View.progressArea3);
           View.resetArea(View.uploadedArea3);
