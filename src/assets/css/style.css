@@ -2286,3 +2286,23 @@ abbr {
 	padding: 0;
 	margin: 0;
 }
+
+#emptyMessage {
+    margin: 30px 30px 0 30px;
+    padding: 0;
+    font-size: 30px;
+    line-height: 42px;
+	text-align: center;
+    font-weight: 700;
+    color: var(--color4);
+}
+
+.containerMessageMonitorInfo {
+	text-align: left;
+	line-break: anywhere;
+}
+
+.containerMessageMonitorInfo p {
+	text-align: center;
+	font-size: 24px;
+}

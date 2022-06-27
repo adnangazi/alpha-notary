@@ -12,6 +12,12 @@ contract Notarization {
     address private currentDocumentOwner;
     
     uint256 private currentInteractionDate;
+    
+    bool private uploadResult;
+    bool private checkResult;
+    bool private removeResult;
+
+    address attualTransaction;
 
     struct Document {
         string name;
@@ -48,7 +54,7 @@ contract Notarization {
     }    
 
     function getInteractionInfo(uint256 pos) public view returns (string memory, uint256, address, string memory, uint256, string memory, address, bool) {
-        Interaction storage interaction = interactionMapping[pos];
+        Interaction memory interaction = interactionMapping[pos];
         return (interaction.name, interaction.date, interaction.owner, interaction.documentName, interaction.documentDate, interaction.documentComments, interaction.documentOwner, interaction.documentIsSet);
     }
 
@@ -80,6 +86,22 @@ contract Notarization {
         return messageSender;
     }
 
+    function getUploadResult() public view returns (bool) {
+        return uploadResult;
+    }
+
+    function getCheckResult() public view returns (bool) {
+        return checkResult;
+    }
+
+    function getRemoveResult() public view returns (bool) {
+        return removeResult;
+    }
+
+    function getTransactionHash() public view returns (address) {
+        return attualTransaction;
+    }
+
 
     function createDocument(string memory _name, string memory _comments) private view returns (Document memory) {
         return Document(_name, block.timestamp, _comments, messageSender, true);
@@ -109,36 +131,35 @@ contract Notarization {
         currentInteractionDate = block.timestamp;
     }
 
-    function upload(string memory _name, uint256 _hashValue, string memory _comments, bool fullMode) public returns (bool) {
-        bool result = documentMapping[_hashValue].isSet;
-
-        if (fullMode) {
-            Interaction memory interaction = createInteraction(result ? "update" : "upload", _hashValue);
-            interactionMapping[interactionCount++] = interaction;
-            emitInteraction(interaction);
-        }
-
+    function upload(string memory _name, uint256 _hashValue, string memory _comments, bool fullMode) public {
+        uploadResult = documentMapping[_hashValue].isSet;
         Document memory document = createDocument(_name, _comments);
         documentMapping[_hashValue] = document;
         emitDocument(document);
         setCurrentDocument(document);
+        
+        if (fullMode) {
+            Interaction memory interaction = createInteraction(uploadResult ? "Update" : "Upload", _hashValue);
+            interactionMapping[interactionCount++] = interaction;
+            emitInteraction(interaction);
+        }
 
-        return result;
+        attualTransaction = tx.origin;
     }
 
-    function check(uint256 _hashValue, bool fullMode) public returns (bool) {
+    function check(uint256 _hashValue, bool fullMode) public {
         if(fullMode) {
-            Interaction memory interaction = createInteraction("check", _hashValue);
+            Interaction memory interaction = createInteraction("Check", _hashValue);
             interactionMapping[interactionCount++] = interaction;
             emitInteraction(interaction);
         }
 
         Document memory document = documentMapping[_hashValue];
-        bool result = document.isSet;
-        setCurrentDocument(result ? document : emptyDocument);
+        checkResult = document.isSet;
+        setCurrentDocument(checkResult ? document : emptyDocument);
         setCurrentInteraction();
-        
-        return result;
+
+        attualTransaction = tx.origin;
     }
     
     function removeDocument(Document memory document, uint256 _hashValue) private {
@@ -147,22 +168,22 @@ contract Notarization {
         emitDocument(document);
     }
 
-    function remove(uint256 _hashValue, bool fullMode) public returns(bool) {
+    function remove(uint256 _hashValue, bool fullMode) public {
         if(fullMode) {
-            Interaction memory interaction = createInteraction("remove", _hashValue);
+            Interaction memory interaction = createInteraction("Remove", _hashValue);
             interactionMapping[interactionCount++] = interaction;
             emitInteraction(interaction);
         }
 
         Document memory document = documentMapping[_hashValue];
-        bool result = document.isSet;
-        setCurrentDocument(result ? document : emptyDocument);
+        removeResult = document.isSet;
+        setCurrentDocument(removeResult ? document : emptyDocument);
         setCurrentInteraction();
 
-        if (result) {
+        if (removeResult) {
             removeDocument(document, _hashValue);
         }
 
-        return result;
+        attualTransaction = tx.origin;
     }
 }
