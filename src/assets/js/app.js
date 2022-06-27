@@ -336,7 +336,7 @@ Controller = {
 
     web3.eth.defaultAccount = web3.eth.accounts[0];
 
-    //Controller.monitoring();
+    Controller.monitoring();
   },
 
   uploadDocument: async () => {
@@ -345,26 +345,9 @@ Controller = {
         .then(async function (hash) {
           var name = View.nameNow.value;
           var comments = View.commentsNow.value;
-          var result = await Controller.notarization.upload(n, hash, c, Controller.contractDecisor);
-          var interaction = await Controller.notarization.getInteractionInfo(await Controller.notarization.getInteractionCount());
-          
-          var toStamp = [];
-          toStamp.push("The document have " + result == 3 ? "not " : "" + "been " + result != 2 ? "uploaded " : "updated " + "correctly");
-          toStamp.push("Name");
-          toStamp.push(name);
-          toStamp.push("Comments");
-          toStamp.push(comments);
-          toStamp.push("Hash");
-          toStamp.push(hash);
+          var result = await Controller.notarization.upload(name, hash, comments, Controller.contractDecisor);
 
-          if (result != 3 && Controller.contractDecisor) {
-            toStamp.push("Date");
-            toStamp.push(interaction[4]);
-            toStamp.push("Owner");
-            toStamp.push(hash);
-          }
-
-          View.notifierGUI(View.notifyArea1, toStamp, 1);
+          View.notifierGUI(View.notifyArea1, ["The document have " + (result == undefined ? "not " : "") + "been " + (result ? "updated " : "uploaded ") + "correctly", "Name", name, "Comments", comments, "Hash", hash, "Date", Utils.epochConverter(await Controller.notarization.getCurrentDocumentDate()), "Owner", await Controller.notarization.getCurrentDocumentOwner()], 1);
           
           View.resetLine(View.nameNow);
           View.resetLine(View.commentsNow);
@@ -388,26 +371,9 @@ Controller = {
       await Utils.createHash(View.files2)
         .then(async function (hash) {
           var result = await Controller.notarization.check(hash, Controller.contractDecisor);
-          var interaction = await Controller.notarization.getInteractionInfo(await Controller.notarization.getInteractionCount());
-          
-          var toStamp = [];
-          toStamp.push("The document have " + result != 1 ? "not " : "" + "been found" + result == 3 ? ", because of error during the operation!" : "!");
+          var date = await Controller.notarization.getCurrentDocumentDate();
 
-          if (result != 3 && Controller.contractDecisor) {
-            toStamp.push("Name");
-            toStamp.push(interaction[3]);
-            toStamp.push("Comments");
-            toStamp.push(interaction[5]);
-            toStamp.push("Date");
-            toStamp.push(interaction[4]);
-            toStamp.push("Owner");
-            toStamp.push(interaction[6]);
-          }
-
-          toStamp.push("Hash");
-          toStamp.push(hash);
-
-          View.notifierGUI(View.notifyArea2, toStamp, 2);
+          View.notifierGUI(View.notifyArea2, ["The document have " + (!result ? "not " : "" + "been found") + (result == undefined ? ", because of error during the operation!" : "!"), "Name", await Controller.notarization.getCurrentDocumentName(), "Comments", await Controller.notarization.getCurrentDocumentComments(), "Hash", hash, "Date", (date != 0 ? Utils.epochConverter(date) : ""), "Owner", await Controller.notarization.getCurrentDocumentOwner(), "Interaction date", Utils.epochConverter(await Controller.notarization.getCurrentInteractionDate()), "Interaction owner", await Controller.notarization.getCurrentInteractionOwner()], 2);
           
           View.resetArea(View.progressArea2);
           View.resetArea(View.uploadedArea2);
@@ -426,27 +392,10 @@ Controller = {
     if (View.files3.length > 0) {
       await Utils.createHash(View.files3)
         .then(async function (hash) {
-          var result = await Controller.notarization.check(hash, Controller.contractDecisor);
-          var interaction = await Controller.notarization.getInteractionInfo(await Controller.notarization.getInteractionCount());
-          
-          var toStamp = [];
-          toStamp.push("The document have " + result != 1 ? "not " : "" + "been removed" + result == 3 ? ", because of error during the operation!" : "!");
+          var result = await Controller.notarization.remove(hash, Controller.contractDecisor);
+          var date = await Controller.notarization.getCurrentDocumentDate();
 
-          if (result != 3 && Controller.contractDecisor) {
-            toStamp.push("Name");
-            toStamp.push(interaction[3]);
-            toStamp.push("Comments");
-            toStamp.push(interaction[5]);
-            toStamp.push("Date");
-            toStamp.push(interaction[4]);
-            toStamp.push("Owner");
-            toStamp.push(interaction[6]);
-          }
-
-          toStamp.push("Hash");
-          toStamp.push(hash);
-
-          View.notifierGUI(View.notifyArea3, toStamp, 3);
+          View.notifierGUI(View.notifyArea3, ["The document have " + (!result ? "not " : "") + "been removed" + (result == undefined ? ", because of error during the operation!" : "!"), "Name", await Controller.notarization.getCurrentDocumentName(), "Comments", await Controller.notarization.getCurrentDocumentComments(), "Hash", hash, "Date", (date != 0 ? Utils.epochConverter(date) : ""), "Owner", await Controller.notarization.getCurrentDocumentOwner(), "Interaction date", Utils.epochConverter(await Controller.notarization.getCurrentInteractionDate()), "Interaction owner", await Controller.notarization.getCurrentInteractionOwner()], 3);
           
           View.resetArea(View.progressArea3);
           View.resetArea(View.uploadedArea3);
@@ -462,12 +411,9 @@ Controller = {
   },
 
   monitoring: async () => {
-    var documents = await Controller.notarization.getDocumentCount();
-    var interactions = await Controller.notarization.getInteractionCount();
-    for (var d = 1; d < documents; d++) {
-      console.log(await Controller.notarization.documentMapping(d));
-    }
-    for (var i = 0; i < interactions; i++) {
+    var interactionNumber = await Controller.notarization.getInteractionCount();
+    for (var i = 0; i < interactionNumber; i++) {
+      
       console.log(await Controller.notarization.interactionMapping(i));
     }
   },
