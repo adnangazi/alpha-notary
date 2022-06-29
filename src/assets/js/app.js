@@ -173,7 +173,7 @@ View = {
   insertLines: async (containerLines, toNotify, deleyer = 0) => {
     var amount = 50;
     var deley = deleyer + amount;
-    containerLines.innerHTML = '<span data-aos="fade-up" data-aos-delay="' + deley + '"><b>' + toNotify[0] + '</b></span>';
+    containerLines.innerHTML = '<p data-aos="fade-up" data-aos-delay="' + deley + '"><b>' + toNotify[0] + '</b></p>';
     deley += amount;
     for (var i = 1; i < toNotify.length; i++) {
       if (i % 2) {
@@ -193,7 +193,7 @@ View = {
 
     View.notifyAreas[idOperation].innerHTML = '<div class="banner"><header id="section-header"><h2 data-aos="fade-up">Notification</h2><p data-aos="fade-up" data-aos-delay="50">View your transaction</p></header><div class="container" data-aos="fade-up" data-aos-delay="100"><div id="containerID" class="row g-5"></div></div></div>';
     var image = '<div class="col-lg-4 col-md-6 d-flex align-items-center aos-init aos-animate" data-aos="zoom-out" data-aos-delay="200"><div class="img"><img id="containerImage" class="img-fluid bottomSpace upperSpace"></div></div>';
-    var lines = '<div class="col-lg-8 col-md-6 content d-flex flex-column justify-content-center"><h3 data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">The followings are the recap information of the operation you just did</h3><h2 data-aos="fade-up" data-aos-delay="200" class="aos-init aos-animate">Some Blockchain stuff just happend!</h2><p id="containerLines"></p></div>';
+    var lines = '<div class="col-lg-8 col-md-6 content d-flex flex-column justify-content-center"><h3 data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">The followings are the recap information of the operation you just did</h3><h2 data-aos="fade-up" data-aos-delay="200" class="aos-init aos-animate">Some Blockchain stuff just happend</h2><p id="containerLines"></p></div>';
     document.getElementById("containerID").innerHTML = idOperation % 2 ? image + lines : lines + image;
     var containerImage = document.getElementById("containerImage");
     
@@ -254,19 +254,18 @@ View = {
     }
   },
 
-  insertInteraction: async (i) => {
+  insertInteraction: async (i, deleyer = 0) => {
     View.emptyMessageMonitor();
-    View.otherValues[2].innerHTML = '<div class="col-lg-4 mt-4 upperSpace" data-aos="fade-up"><div class="box ' + View.colors[i % 8] + '"><img alt="' + View.altImages[i % 6] + '" id="valueImg' + ((i % 6) + 1) + '" src="' + View.images[i % 6] + '" class="img-fluid ' + (i % 2 == 0 ? "antiFloating" : "floating") + '" data-aos="zoom-out" data-aos-delay="100"><div class="containerMessageMonitorInfo"></div></div></div>' + View.otherValues[2].innerHTML;
+    View.otherValues[2].innerHTML = '<div class="col-lg-4 mt-4 upperSpace" data-aos="fade-up" data-aos-delay="' + deleyer + '"><div class="box ' + View.colors[i % 8] + '"><img alt="' + View.altImages[i % 6] + '" id="valueImg' + ((i % 6) + 1) + '" src="' + View.images[i % 6] + '" class="img-fluid ' + (i % 2 == 0 ? "floating" : "antiFloating") + '" data-aos="zoom-out" data-aos-delay="' + (deleyer + 100) + '"><div class="containerMessageMonitorInfo"></div></div></div>' + View.otherValues[2].innerHTML;
     var interaction = await Controller.notarization.getInteractionInfo(i);
-    View.insertLines(document.querySelectorAll(".containerMessageMonitorInfo")[0], [interaction[0], "Interaction date", Utils.epochConverter(interaction[1]), "Interaction owner", interaction[2], "Name", interaction[3], "Date", interaction[4] != 0 ? Utils.epochConverter(interaction[4]) : "", "Comments", interaction[5], "Owner", interaction[6]]);
-
+    await View.insertLines(document.querySelectorAll(".containerMessageMonitorInfo")[0], [interaction[0], "Interaction date", Utils.epochConverter(interaction[1]), "Interaction owner", interaction[2], "Name", interaction[3], "Date", interaction[4] != 0 ? Utils.epochConverter(interaction[4]) : "", "Comments", interaction[5], "Owner", interaction[6]], deleyer);
   },
 
   monitoring: async () => {
     View.emptyMessageMonitor();
-    var interactionNumber = await Controller.notarization.getInteractionCount();
-    for (var i = 0; i < interactionNumber; i++) {
-      await View.insertInteraction(i);
+    var length = await Controller.notarization.getInteractionCount() - 1;
+    for (var i = 0; i <= length; i++) {
+      await View.insertInteraction(i, ((length - i) % 3) * 50);
     }
   },
 }

@@ -953,7 +953,7 @@ a {
 	color: var(--color4);
 	padding: 12px 0;
 	margin-right: 25px;
-	transition: 0.3s;
+	transition: 0.15s;
 	margin-bottom: -2px;
 	border-radius: 0;
 }
@@ -1832,10 +1832,35 @@ a {
 /*----------------------------------------------------*/
 @import url('https://fonts.googleapis.com/css?family=Space+Mono:400,400i,700,700i');
 
+
+@media (max-width: 500px) {
+	.card {
+		width: 300px !important;
+		height: 350px !important;
+	}
+	
+	.card__part {
+		width: 300px !important;
+		height: 350px !important;
+	}
+}
+
+@media (max-width: 350px) {
+	.card {
+		width: 250px !important;
+		height: 400px !important;
+	}
+	
+	.card__part {
+		width: 250px !important;
+		height: 400px !important;
+	}
+}
+
 .card {
 	width: 450px;
 	height: 275px;
-	margin: auto;
+	margin: 20px auto 60px auto;
 	background-color: transparent;
 	perspective: 600px;
 	border: none;
@@ -2089,8 +2114,8 @@ a {
 }
 
 .progress-area .row .content {
-	width: 86%;
-  	padding: 0;
+	width: 95%;
+  	padding: 0 0 0 35px;
   	background-color: transparent;
 }
 
@@ -2298,4 +2323,8 @@ abbr {
 .containerMessageMonitorInfo p {
 	text-align: center;
 	font-size: 24px;
+}
+
+#cardContent {
+	margin-bottom: 50px;
 }
