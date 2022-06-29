@@ -10,14 +10,11 @@ contract Notarization {
     uint256 private currentDocumentDate;
     string private currentDocumentComments;
     address private currentDocumentOwner;
-    
     uint256 private currentInteractionDate;
     
     bool private uploadResult;
     bool private checkResult;
     bool private removeResult;
-
-    address attualTransaction;
 
     struct Document {
         string name;
@@ -51,15 +48,14 @@ contract Notarization {
         interactionCount = 0;
         messageSender = msg.sender;
         emptyDocument = Document("", 0, "", address(0), false);
-    }    
-
-    function getInteractionInfo(uint256 pos) public view returns (string memory, uint256, address, string memory, uint256, string memory, address, bool) {
-        Interaction memory interaction = interactionMapping[pos];
-        return (interaction.name, interaction.date, interaction.owner, interaction.documentName, interaction.documentDate, interaction.documentComments, interaction.documentOwner, interaction.documentIsSet);
     }
 
     function getInteractionCount() public view returns (uint256) {
         return interactionCount;
+    }
+
+    function getCurrentInteractionOwner() public view returns (address) {
+        return messageSender;
     }
 
     function getCurrentDocumentName() public view returns (string memory) {
@@ -82,10 +78,6 @@ contract Notarization {
         return currentInteractionDate;
     }
 
-    function getCurrentInteractionOwner() public view returns (address) {
-        return messageSender;
-    }
-
     function getUploadResult() public view returns (bool) {
         return uploadResult;
     }
@@ -97,11 +89,6 @@ contract Notarization {
     function getRemoveResult() public view returns (bool) {
         return removeResult;
     }
-
-    function getTransactionHash() public view returns (address) {
-        return attualTransaction;
-    }
-
 
     function createDocument(string memory _name, string memory _comments) private view returns (Document memory) {
         return Document(_name, block.timestamp, _comments, messageSender, true);
@@ -131,6 +118,11 @@ contract Notarization {
         currentInteractionDate = block.timestamp;
     }
 
+    function getInteractionInfo(uint256 pos) public view returns (string memory, uint256, address, string memory, uint256, string memory, address, bool) {
+        Interaction memory interaction = interactionMapping[pos];
+        return (interaction.name, interaction.date, interaction.owner, interaction.documentName, interaction.documentDate, interaction.documentComments, interaction.documentOwner, interaction.documentIsSet);
+    }
+
     function upload(string memory _name, uint256 _hashValue, string memory _comments, bool fullMode) public {
         uploadResult = documentMapping[_hashValue].isSet;
         Document memory document = createDocument(_name, _comments);
@@ -139,12 +131,10 @@ contract Notarization {
         setCurrentDocument(document);
         
         if (fullMode) {
-            Interaction memory interaction = createInteraction(uploadResult ? "Update" : "Upload", _hashValue);
+            Interaction memory interaction = createInteraction( uploadResult ? "Update" : "Upload", _hashValue);
             interactionMapping[interactionCount++] = interaction;
             emitInteraction(interaction);
         }
-
-        attualTransaction = tx.origin;
     }
 
     function check(uint256 _hashValue, bool fullMode) public {
@@ -158,8 +148,6 @@ contract Notarization {
         checkResult = document.isSet;
         setCurrentDocument(checkResult ? document : emptyDocument);
         setCurrentInteraction();
-
-        attualTransaction = tx.origin;
     }
     
     function removeDocument(Document memory document, uint256 _hashValue) private {
@@ -183,7 +171,5 @@ contract Notarization {
         if (removeResult) {
             removeDocument(document, _hashValue);
         }
-
-        attualTransaction = tx.origin;
     }
 }

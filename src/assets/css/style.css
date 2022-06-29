@@ -47,7 +47,7 @@
 	--color42: #b50edfb2;
 	--color43: #f51f9cb0;
 	--color44: #7f5ff6;
-	--color45: #fb5860b7;
+	--color45: #82faf2;
 	--color46: #eec703;
 	--color47: #eff0f7;
 	--color48: #f9fafa;
@@ -177,14 +177,10 @@ section {
 	border-top: 1px solid var(--color33);
 	border-bottom: 1px solid var(--color33);
 	padding: 15px 0;
-	background: var(--color47);
+	background: var(--color48);
 	min-height: 40px;
 	color: var(--color4);
 	text-align: center;
-}
-
-.breadcrumbs.notarization {
-	background: var(--color48);
 }
 
 @media (max-width: 992px) {
@@ -422,7 +418,7 @@ a {
 	}
 
 	.getStartedLi {
-		padding: 0 20px !important;
+		padding: 0 20px;
 	}
 }
 
@@ -447,7 +443,6 @@ a {
 	display: block;
 	position: absolute;
 	top: 55px;
-	align-items: center;
 	right: 15px;
 	bottom: 15px;
 	left: 15px;
@@ -460,7 +455,9 @@ a {
 }
 
 .navbar-mobile a,
-.navbar-mobile a:focus {
+.navbar-mobile a:focus,
+.navbar-mobile .toggleCheck {
+	text-align: center;
 	padding: 10px 30px;
 	font-size: 15px;
 	color: var(--color4);
@@ -478,12 +475,8 @@ a {
 .hero {
 	width: 100%;
 	height: 100vh;
-	background: url(../img/background/hero-bg.png) top center no-repeat;
-	background-size: cover;
-}
-
-.hero.heroNotarization {
 	background: url(../img/background/hero-bg2.png) top center no-repeat;
+	background-size: cover;
 }
 
 .hero h1 {

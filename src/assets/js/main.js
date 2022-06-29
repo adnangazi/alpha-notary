@@ -183,17 +183,16 @@
 
 
 Animations = {
-  switcherDarkMode: document.getElementById("darkMode"),
-  darkDecisor: true,
+  darkMode: [document.getElementById("darkMode"), true],
 
   darkModeSwitcher: async () => {
-    if (Animations.darkDecisor) {
+    if (Animations.darkMode[1]) {
       document.documentElement.setAttribute("data-theme", "dark");
-      Animations.switcherDarkMode.title = 'Dark mode on';
+      Animations.darkMode[0].title = 'Dark mode on';
     } else {
       document.documentElement.setAttribute("data-theme", "light");
-      Animations.switcherDarkMode.title = 'Dark mode off';
+      Animations.darkMode[0].title = 'Dark mode off';
     }
-    Animations.darkDecisor = !Animations.darkDecisor;
+    Animations.darkMode[1] = !Animations.darkMode[1];
   }
 }
