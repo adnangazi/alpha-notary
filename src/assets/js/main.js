@@ -21,6 +21,7 @@
   }
 
   let navbarlinks = select('#navbar .scrollto', true);
+
   const navbarlinksActive = () => {
     let position = window.scrollY + 200;
     navbarlinks.forEach(navbarlink => {
@@ -34,6 +35,7 @@
       }
     })
   }
+
   window.addEventListener('load', navbarlinksActive);
   onscroll(document, navbarlinksActive);
 
@@ -51,6 +53,7 @@
   }
 
   let selectHeader = select('#header');
+
   if (selectHeader) {
     const headerScrolled = () => {
       if (window.scrollY > 100) {
@@ -64,6 +67,7 @@
   }
 
   let backtotop = select('.back-to-top');
+  
   if (backtotop) {
     const toggleBacktotop = () => {
       if (window.scrollY > 100) {
@@ -176,6 +180,7 @@
       mirror: false
     });
   }
+
   window.addEventListener('load', () => {
     aos_init();
   });

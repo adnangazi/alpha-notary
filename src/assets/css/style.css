@@ -388,6 +388,74 @@ a {
 	visibility: hidden;
 }
 
+.navbar .dropdown ul {
+	display: block;
+	position: absolute;
+	margin: 0;
+	padding: 10px 0;
+	z-index: 99;
+	opacity: 0;
+	visibility: hidden;
+	background: var(--color6);
+	box-shadow: 0px 0px 30px var(--color36);
+	transition: 0.3s;
+	border-radius: 5px;
+}
+
+.navbar .dropdown ul li {
+	min-width: 200px;
+}
+
+.navbar .dropdown ul a {
+	padding: 10px 20px;
+	font-size: 15px;
+	text-transform: none;
+	font-weight: 600;
+}
+
+.navbar .dropdown ul a i {
+	font-size: 12px;
+}
+
+.navbar .dropdown ul a:hover,
+.navbar .dropdown ul .active:hover,
+.navbar .dropdown ul li:hover>a {
+	color: var(--color2);
+}
+
+.navbar .dropdown:hover>ul {
+	opacity: 1;
+	top: 100%;
+	visibility: visible;
+}
+
+.navbar .dropdown .dropdown ul {
+	top: 0;
+	left: calc(100% - 30px);
+}
+
+.navbar .getstarted:before,
+.navbar li:hover>.getstarted:before {
+	visibility: hidden;
+}
+
+.navbar .dropdown .dropdown:hover>ul {
+	opacity: 1;
+	top: 0;
+	left: 100%;
+	visibility: visible;
+}
+
+@media (max-width: 1366px) {
+	.navbar .dropdown .dropdown ul {
+		left: -90%;
+	}
+
+	.navbar .dropdown .dropdown:hover>ul {
+		left: -100%;
+	}
+}
+
 /*--------------------------------------------------------------
 * Mobile Navigation 
 --------------------------------------------------------------*/
@@ -1288,6 +1356,12 @@ a {
 	background-color: var(--color2);
 }
 
+#me {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 800px;
+}
+
 /*--------------------------------------------------------------
 # Contact
 --------------------------------------------------------------*/
@@ -1463,368 +1537,6 @@ a {
 .footer .credits {
 	text-align: center;
 	padding-top: 30px;
-}
-
-/*--------------------------------------------------------------
-# MY ADDS
---------------------------------------------------------------*/
-.bottomSpace {
-	margin-bottom: 30px;
-}
-
-.rotate {
-	animation: rotate 4s ease-in-out infinite alternate-reverse both;
-}
-
-@-webkit-keyframes rotate {
-	0% {
-		transform: rotate(0);
-	}
-
-	50% {
-		transform: rotate(360deg);
-	}
-
-	100% {
-		transform: rotate(360deg);
-	}
-}
-
-@keyframes rotate {
-	0% {
-		transform: rotate(0);
-	}
-
-	50% {
-		transform: rotate(360deg);
-	}
-
-	100% {
-		transform: rotate(360deg);
-	}
-}
-
-.antiFloating {
-	animation: down-up 2s ease-in-out infinite alternate-reverse both;
-}
-
-@-webkit-keyframes down-up {
-	0% {
-		transform: translateY(-10px);
-	}
-
-	100% {
-		transform: translateY(10px);
-	}
-}
-
-@keyframes down-up {
-	0% {
-		transform: translateY(-10px);
-	}
-
-	100% {
-		transform: translateY(10px);
-	}
-}
-
-.floating {
-	animation: up-down 2s ease-in-out infinite alternate-reverse both;
-}
-
-@-webkit-keyframes up-down {
-	0% {
-		transform: translateY(10px);
-	}
-
-	100% {
-		transform: translateY(-10px);
-	}
-}
-
-@keyframes up-down {
-	0% {
-		transform: translateY(10px);
-	}
-
-	100% {
-		transform: translateY(-10px);
-	}
-}
-
-.upperSpace {
-	margin-top: 30px;
-}
-
-.iframeMap {
-	width: 100%;
-	border-radius: 5px;
-	height: 400px;
-	margin-bottom: 20px;
-}
-
-.navbar .dropdown ul {
-	display: block;
-	position: absolute;
-	margin: 0;
-	padding: 10px 0;
-	z-index: 99;
-	opacity: 0;
-	visibility: hidden;
-	background: var(--color6);
-	box-shadow: 0px 0px 30px var(--color36);
-	transition: 0.3s;
-	border-radius: 5px;
-}
-
-.navbar .dropdown ul li {
-	min-width: 200px;
-}
-
-.navbar .dropdown ul a {
-	padding: 10px 20px;
-	font-size: 15px;
-	text-transform: none;
-	font-weight: 600;
-}
-
-.navbar .dropdown ul a i {
-	font-size: 12px;
-}
-
-.navbar .dropdown ul a:hover,
-.navbar .dropdown ul .active:hover,
-.navbar .dropdown ul li:hover>a {
-	color: var(--color2);
-}
-
-.navbar .dropdown:hover>ul {
-	opacity: 1;
-	top: 100%;
-	visibility: visible;
-}
-
-.navbar .dropdown .dropdown ul {
-	top: 0;
-	left: calc(100% - 30px);
-}
-
-.navbar .getstarted:before,
-.navbar li:hover>.getstarted:before {
-	visibility: hidden;
-}
-
-.navbar .dropdown .dropdown:hover>ul {
-	opacity: 1;
-	top: 0;
-	left: 100%;
-	visibility: visible;
-}
-
-@media (max-width: 1366px) {
-	.navbar .dropdown .dropdown ul {
-		left: -90%;
-	}
-
-	.navbar .dropdown .dropdown:hover>ul {
-		left: -100%;
-	}
-}
-
-.azure:hover {
-	color: var(--color6);
-	background-color: var(--color23);
-}
-
-.orange:hover {
-	color: var(--color6);
-	background-color: var(--color20);
-}
-
-.lightGreen:hover {
-	color: var(--color6);
-	background-color: var(--color19);
-}
-
-.strangeRed:hover {
-	color: var(--color6);
-	background-color: var(--color26);
-}
-
-.violet:hover {
-	color: var(--color6);
-	background-color: var(--color28);
-}
-
-.pink:hover {
-	color: var(--color6);
-	background-color: var(--color30);
-}
-
-.newBlue:hover {
-	color: var(--color6);
-	background-color: var(--color37);
-}
-
-.water:hover {
-	color: var(--color6);
-	background-color: var(--color38);
-}
-
-.azure {
-	border-bottom: 3px solid var(--color23) !important;
-}
-
-.orange {
-	border-bottom: 3px solid var(--color20) !important;
-}
-
-.lightGreen {
-	border-bottom: 3px solid var(--color19) !important;
-}
-
-.strangeRed {
-	border-bottom: 3px solid var(--color26) !important;
-}
-
-.violet {
-	border-bottom: 3px solid var(--color28) !important;
-}
-
-.pink {
-	border-bottom: 3px solid var(--color30) !important;
-}
-
-.newBlue {
-	border-bottom: 3px solid var(--color37) !important;
-}
-
-.water {
-	border-bottom: 3px solid var(--color38) !important;
-}
-
-.lightAzure:hover {
-	color: var(--color6);
-	background-color: var(--color39);
-}
-
-.lightOrange:hover {
-	color: var(--color6);
-	background-color: var(--color40);
-}
-
-.lightLightGreen:hover {
-	color: var(--color6);
-	background-color: var(--color49);
-}
-
-.lightStrangeRed:hover {
-	color: var(--color6);
-	background-color: var(--color41);
-}
-
-.lightViolet:hover {
-	color: var(--color6);
-	background-color: var(--color42);
-}
-
-.lightPink:hover {
-	color: var(--color6);
-	background-color: var(--color43);
-}
-
-.lightNewBlue:hover {
-	color: var(--color6);
-	background-color: var(--color44);
-}
-
-.lightWater:hover {
-	color: var(--color6);
-	background-color: var(--color45);
-}
-
-.lightAzure {
-	border-bottom: 3px solid var(--color23) !important;
-}
-
-.lightOrange {
-	border-bottom: 3px solid var(--color20) !important;
-}
-
-.lightLightGreen {
-	border-bottom: 3px solid var(--color19) !important;
-}
-
-.lightStrangeRed {
-	border-bottom: 3px solid var(--color26) !important;
-}
-
-.lightViolet {
-	border-bottom: 3px solid var(--color28) !important;
-}
-
-.lightPink {
-	border-bottom: 3px solid var(--color30) !important;
-}
-
-.lightNewBlue {
-	border-bottom: 3px solid var(--color37) !important;
-}
-
-.lightWater {
-	border-bottom: 3px solid var(--color38) !important;
-}
-
-.azureEmoji {
-	color: var(--color23);
-}
-
-.orangeEmoji {
-	color: var(--color20);
-}
-
-.lightGreenEmoji {
-	color: var(--color19);
-}
-
-.strangeRedEmoji {
-	color: var(--color26);
-}
-
-.violetEmoji {
-	color: var(--color28);
-}
-
-.pinkEmoji {
-	color: var(--color30);
-}
-
-.newBlueEmoji {
-	color: var(--color37);
-}
-
-.waterEmoji {
-	color: var(--color38);
-}
-
-.count-box:hover .azureEmoji,
-.count-box:hover .orangeEmoji,
-.count-box:hover .lightGreenEmoji,
-.count-box:hover .strangeRedEmoji,
-.count-box:hover .violetEmoji,
-.count-box:hover .pinkEmoji,
-.count-box:hover .newBlueEmoji,
-.count-box:hover .waterEmoji,
-.info-box:hover .azureEmoji,
-.info-box:hover .orangeEmoji,
-.info-box:hover .lightGreenEmoji,
-.info-box:hover .strangeRedEmoji,
-.info-box:hover .violetEmoji,
-.info-box:hover .pinkEmoji,
-.info-box:hover .newBlueEmoji,
-.info-box:hover .waterEmoji,
-.testimonial-item:hover .emoji {
-	color: var(--color6);
 }
 
 /*----------------------------------------------------*/
@@ -2021,6 +1733,10 @@ a {
 	font-size: 24px;
 }
 
+#cardContent {
+	margin-bottom: 50px;
+}
+
 /*----------------------------------------------------*/
 /*  FORM UPLOADER
 /*----------------------------------------------------*/
@@ -2213,6 +1929,32 @@ a {
     line-height: 24px;
     box-shadow: 0px 5px 25px var(--color13);
 }
+.wrapper input.file-input {
+	width: 0;
+	height: 0;
+	padding: 0;
+	margin: 0;
+}
+
+#emptyMessage {
+    margin: 30px 30px 0 30px;
+    padding: 0;
+    font-size: 30px;
+    line-height: 42px;
+	text-align: center;
+    font-weight: 700;
+    color: var(--color4);
+}
+
+.containerMessageMonitorInfo {
+	text-align: left;
+	line-break: anywhere;
+}
+
+.containerMessageMonitorInfo p {
+	text-align: center;
+	font-size: 24px;
+}
 
 /*----------------------------------------------------*/
 /*  TOGGLE
@@ -2298,33 +2040,305 @@ abbr {
 	color: var(--color1);
 }
 
-.wrapper input.file-input {
-	width: 0;
-	height: 0;
-	padding: 0;
-	margin: 0;
+/*--------------------------------------------------------------
+# PAGINATION
+--------------------------------------------------------------*/
+.bottomSpace {
+	margin-bottom: 30px;
 }
 
-#emptyMessage {
-    margin: 30px 30px 0 30px;
-    padding: 0;
-    font-size: 30px;
-    line-height: 42px;
-	text-align: center;
-    font-weight: 700;
-    color: var(--color4);
+.upperSpace {
+	margin-top: 30px;
 }
 
-.containerMessageMonitorInfo {
-	text-align: left;
-	line-break: anywhere;
+/*--------------------------------------------------------------
+# IFRAME
+--------------------------------------------------------------*/
+.iframeMap {
+	width: 100%;
+	border-radius: 5px;
+	height: 400px;
+	margin-bottom: 20px;
 }
 
-.containerMessageMonitorInfo p {
-	text-align: center;
-	font-size: 24px;
+/*--------------------------------------------------------------
+# LOGO ANIMATION
+--------------------------------------------------------------*/
+.rotate {
+	animation: rotate 4s ease-in-out infinite alternate-reverse both;
 }
 
-#cardContent {
-	margin-bottom: 50px;
+@-webkit-keyframes rotate {
+	0% {
+		transform: rotate(0);
+	}
+
+	50% {
+		transform: rotate(360deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes rotate {
+	0% {
+		transform: rotate(0);
+	}
+
+	50% {
+		transform: rotate(360deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.antiFloating {
+	animation: down-up 2s ease-in-out infinite alternate-reverse both;
+}
+
+@-webkit-keyframes down-up {
+	0% {
+		transform: translateY(-10px);
+	}
+
+	100% {
+		transform: translateY(10px);
+	}
+}
+
+@keyframes down-up {
+	0% {
+		transform: translateY(-10px);
+	}
+
+	100% {
+		transform: translateY(10px);
+	}
+}
+
+.floating {
+	animation: up-down 2s ease-in-out infinite alternate-reverse both;
+}
+
+@-webkit-keyframes up-down {
+	0% {
+		transform: translateY(10px);
+	}
+
+	100% {
+		transform: translateY(-10px);
+	}
+}
+
+@keyframes up-down {
+	0% {
+		transform: translateY(10px);
+	}
+
+	100% {
+		transform: translateY(-10px);
+	}
+}
+
+/*--------------------------------------------------------------
+# COLORS
+--------------------------------------------------------------*/
+.azure:hover {
+	color: var(--color6);
+	background-color: var(--color23);
+}
+
+.orange:hover {
+	color: var(--color6);
+	background-color: var(--color20);
+}
+
+.lightGreen:hover {
+	color: var(--color6);
+	background-color: var(--color19);
+}
+
+.strangeRed:hover {
+	color: var(--color6);
+	background-color: var(--color26);
+}
+
+.violet:hover {
+	color: var(--color6);
+	background-color: var(--color28);
+}
+
+.pink:hover {
+	color: var(--color6);
+	background-color: var(--color30);
+}
+
+.newBlue:hover {
+	color: var(--color6);
+	background-color: var(--color37);
+}
+
+.water:hover {
+	color: var(--color6);
+	background-color: var(--color38);
+}
+
+.azure {
+	border-bottom: 3px solid var(--color23) !important;
+}
+
+.orange {
+	border-bottom: 3px solid var(--color20) !important;
+}
+
+.lightGreen {
+	border-bottom: 3px solid var(--color19) !important;
+}
+
+.strangeRed {
+	border-bottom: 3px solid var(--color26) !important;
+}
+
+.violet {
+	border-bottom: 3px solid var(--color28) !important;
+}
+
+.pink {
+	border-bottom: 3px solid var(--color30) !important;
+}
+
+.newBlue {
+	border-bottom: 3px solid var(--color37) !important;
+}
+
+.water {
+	border-bottom: 3px solid var(--color38) !important;
+}
+
+.lightAzure:hover {
+	color: var(--color6);
+	background-color: var(--color39);
+}
+
+.lightOrange:hover {
+	color: var(--color6);
+	background-color: var(--color40);
+}
+
+.lightLightGreen:hover {
+	color: var(--color6);
+	background-color: var(--color49);
+}
+
+.lightStrangeRed:hover {
+	color: var(--color6);
+	background-color: var(--color41);
+}
+
+.lightViolet:hover {
+	color: var(--color6);
+	background-color: var(--color42);
+}
+
+.lightPink:hover {
+	color: var(--color6);
+	background-color: var(--color43);
+}
+
+.lightNewBlue:hover {
+	color: var(--color6);
+	background-color: var(--color44);
+}
+
+.lightWater:hover {
+	color: var(--color6);
+	background-color: var(--color45);
+}
+
+.lightAzure {
+	border-bottom: 3px solid var(--color23) !important;
+}
+
+.lightOrange {
+	border-bottom: 3px solid var(--color20) !important;
+}
+
+.lightLightGreen {
+	border-bottom: 3px solid var(--color19) !important;
+}
+
+.lightStrangeRed {
+	border-bottom: 3px solid var(--color26) !important;
+}
+
+.lightViolet {
+	border-bottom: 3px solid var(--color28) !important;
+}
+
+.lightPink {
+	border-bottom: 3px solid var(--color30) !important;
+}
+
+.lightNewBlue {
+	border-bottom: 3px solid var(--color37) !important;
+}
+
+.lightWater {
+	border-bottom: 3px solid var(--color38) !important;
+}
+
+.azureEmoji {
+	color: var(--color23);
+}
+
+.orangeEmoji {
+	color: var(--color20);
+}
+
+.lightGreenEmoji {
+	color: var(--color19);
+}
+
+.strangeRedEmoji {
+	color: var(--color26);
+}
+
+.violetEmoji {
+	color: var(--color28);
+}
+
+.pinkEmoji {
+	color: var(--color30);
+}
+
+.newBlueEmoji {
+	color: var(--color37);
+}
+
+.waterEmoji {
+	color: var(--color38);
+}
+
+.count-box:hover .azureEmoji,
+.count-box:hover .orangeEmoji,
+.count-box:hover .lightGreenEmoji,
+.count-box:hover .strangeRedEmoji,
+.count-box:hover .violetEmoji,
+.count-box:hover .pinkEmoji,
+.count-box:hover .newBlueEmoji,
+.count-box:hover .waterEmoji,
+.info-box:hover .azureEmoji,
+.info-box:hover .orangeEmoji,
+.info-box:hover .lightGreenEmoji,
+.info-box:hover .strangeRedEmoji,
+.info-box:hover .violetEmoji,
+.info-box:hover .pinkEmoji,
+.info-box:hover .newBlueEmoji,
+.info-box:hover .waterEmoji,
+.testimonial-item:hover .emoji {
+	color: var(--color6);
 }
