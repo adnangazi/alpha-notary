@@ -204,7 +204,7 @@ section {
 }
 
 .breadcrumbs ol a {
-	transition: all ease-in-out 0.3s;
+	transition: 0.3s;
 	color: var(--color4);
 }
 
@@ -237,7 +237,7 @@ section {
 	width: 40px;
 	height: 40px;
 	border-radius: 5px;
-	transition: all 0.3s;
+	transition: 0.3s;
 }
 
 .back-to-top i {
@@ -260,7 +260,7 @@ section {
 # Header
 --------------------------------------------------------------*/
 .header {
-	transition: all 0.3s;
+	transition: 0.3s;
 	z-index: 997;
 	padding: 20px 0;
 }
@@ -352,7 +352,7 @@ a {
 	background-color: var(--color2);
 	visibility: hidden;
 	width: 0px;
-	transition: all 0.3s ease-in-out 0s;
+	transition: 0.3s;
 }
 
 .navbar a:hover:before,
@@ -743,7 +743,7 @@ a {
 --------------------------------------------------------------*/
 .featured-services .service-item {
 	padding: 30px;
-	transition: all ease-in-out 0.3s;
+	transition: 0.3s;
 	background: var(--color6);
 	height: 100%;
 }
@@ -766,7 +766,7 @@ a {
 
 .featured-services .service-item h4 a {
 	color: var(--color15);
-	transition: ease-in-out 0.3s;
+	transition: 0.3s;
 }
 
 .featured-services .service-item p {
@@ -1245,7 +1245,7 @@ a {
 	padding: 30px;
 	margin: 40px 30px;
 	border-radius: 5px;
-	box-shadow: 0px 0 5px rgb(1 41 112 / 8%);
+	box-shadow: 0px 0 5px var(--color18);
 	background: var(--color10);
 	min-height: 320px;
 	display: flex;
@@ -1544,7 +1544,6 @@ a {
 /*----------------------------------------------------*/
 @import url('https://fonts.googleapis.com/css?family=Space+Mono:400,400i,700,700i');
 
-
 @media (max-width: 500px) {
 	.card {
 		width: 300px !important;
@@ -1591,7 +1590,7 @@ a {
 	background-position: center;
 	background-size: cover;
 	border-radius: 5px;
-	transition: all .5s ease-in-out;
+	transition: 0.7s;
 	backface-visibility: hidden;
 }
 
@@ -1980,7 +1979,7 @@ a {
 	right: 0;
 	bottom: 0;
 	background-color: var(--color46);
-	transition: .3s;
+	transition: 0.3s;
 }
 
 .toggleCheck.inverted .slider {
@@ -1995,7 +1994,7 @@ a {
 	left: 4px;
 	bottom: 4px;
 	background-color: var(--color6);
-	transition: .3s;
+	transition: 0.3s;
 }
 
 .toggleCheck.inverted input:checked+.slider {
@@ -2007,8 +2006,6 @@ a {
 }
 
 .toggleCheck input:checked+.slider:before {
-	-webkit-transform: translateX(26px);
-	-ms-transform: translateX(26px);
 	transform: translateX(26px);
 }
 

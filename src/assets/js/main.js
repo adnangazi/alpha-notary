@@ -186,10 +186,15 @@
   });
 })();
 
-
+/**
+* launch the controller when the application is open
+*/
 Animations = {
   darkMode: [document.getElementById("darkMode"), true],
 
+  /**
+  * launch the controller when the application is open
+  */
   darkModeSwitcher: async () => {
     if (Animations.darkMode[1]) {
       document.documentElement.setAttribute("data-theme", "dark");
