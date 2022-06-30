@@ -546,7 +546,13 @@ Controller = {
   */
   uploadDocument: async () => {
     // checking the correct format of the values for the operation
-    if (View.files[0].length > 0 && View.otherValues[3] != "") {
+    var name = View.otherValues[3].value;
+    var emptyName = name == "";
+    var majorName = name.lastIndexOf('>');
+    var minorName = name.indexOf('<');
+    var correctFormatName = majorName != -1 && minorName != -1 ? majorName < minorName : true;
+
+    if (View.files[0].length > 0 && !emptyName && correctFormatName) {
       await Utils.createHash(View.files[0])
         /**
         * upload in the Blockchain a file
@@ -555,23 +561,29 @@ Controller = {
         */
         .then(async (hash) => {
           // getting other information
-          var name = View.otherValues[3].value;
           var comments = View.otherValues[4].value;
-          await Controller.notarization.upload(name, hash, comments, Controller.contractDecisor);
+          var majorComments = comments.lastIndexOf('>');
+          var minorComments = comments.indexOf('<');
 
-          // visualizing in the GUI the result
-          View.bannerNotify(["The document have been " + (await Controller.notarization.getUploadResult() ? "updated " : "uploaded ") + "correctly", "Name", name, "Comments", comments, "Hash", hash, "Date", Utils.epochConverter(await Controller.notarization.getCurrentDocumentDate()), "Owner", await Controller.notarization.getCurrentDocumentOwner()], 1);
+          if (majorComments != -1 && minorComments != -1 ? majorComments < minorComments : true) { 
+            await Controller.notarization.upload(name, hash, comments, Controller.contractDecisor);
 
-          // resetting the uploading stuff
-          View.resetLine(View.otherValues[3]);
-          View.resetLine(View.otherValues[4]);
-          View.resetArea(View.progressAreas[0]);
-          View.resetArea(View.uploadedAreas[0]);
-          View.resetFile(0);
+            // visualizing in the GUI the result
+            View.bannerNotify(["The document have been " + (await Controller.notarization.getUploadResult() ? "updated " : "uploaded ") + "correctly", "Name", name, "Comments", comments, "Hash", hash, "Date", Utils.epochConverter(await Controller.notarization.getCurrentDocumentDate()), "Owner", await Controller.notarization.getCurrentDocumentOwner()], 1);
 
-          // inserting the current Interaction
-          if (Controller.contractDecisor) {
-            View.insertInteraction(await Controller.notarization.getInteractionCount() - 1);
+            // resetting the uploading stuff
+            View.resetLine(View.otherValues[3]);
+            View.resetLine(View.otherValues[4]);
+            View.resetArea(View.progressAreas[0]);
+            View.resetArea(View.uploadedAreas[0]);
+            View.resetFile(0);
+
+            // inserting the current Interaction
+            if (Controller.contractDecisor) {
+              View.insertInteraction(await Controller.notarization.getInteractionCount() - 1);
+            }
+          } else {
+            View.bannerNotify(["There may be an HTML tag in the comments!"], 1);
           }
         })
         /**
@@ -582,8 +594,10 @@ Controller = {
         .catch(function (err) {
           console.error(err);
         });
-    } else if (View.otherValues[3] == "") {
+    } else if (emptyName) {
       View.bannerNotify(["Empty name found!"], 1);
+    } else if (!correctFormatName) {
+      View.bannerNotify(["There may be an HTML tag in the name!"], 1);
     } else {
       View.bannerNotify(["No document found!"], 1);
     }
