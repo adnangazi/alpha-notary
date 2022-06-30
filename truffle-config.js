@@ -11,7 +11,7 @@ module.exports = {
       network_id: 137
     },
     mainnet: {
-      provider: () => new HDWalletProvider(mnemonic, `https://mainnet.infura.io/v3/`),
+      provider: () => new HDWalletProvider(mnemonic, `https://mainnet.infura.io/v3/${infuraKey}`),
       network_id: 1
     },
     palm: {
@@ -36,19 +36,19 @@ module.exports = {
       network_id: 80001
     },
     ropsten: {
-      provider: () => new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/`),
+      provider: () => new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/${infuraKey}`),
       network_id: 3
     },
     kovan: {
-      provider: () => new HDWalletProvider(mnemonic, `https://kovan.infura.io/v3/`),
+      provider: () => new HDWalletProvider(mnemonic, `https://kovan.infura.io/v3/${infuraKey}`),
       network_id: 42
     },
     rinkeby: {
-      provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/`),
+      provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/${infuraKey}`),
       network_id: 4
     },
     gorli: {
-      provider: () => new HDWalletProvider(mnemonic, `https://goerli.infura.io/v3/`),
+      provider: () => new HDWalletProvider(mnemonic, `https://goerli.infura.io/v3/${infuraKey}`),
       network_id: 5
     },
     palmtestnet: {

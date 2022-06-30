@@ -2,14 +2,19 @@
   "name":"alpha-notary",
   "version":"1.0.0",
   "description":"Blockchain Notarization dApp",
-  "author":"Adnan Latif Gazi",
+  "keywords": ["Blockchain", "Notarization", "DApp", "Ethereum", "NFTs"],
+  "author": {
+    "name": "Adnan Latif Gazi",
+    "email": "adnangazi.ag@gmail.com",
+    "url": "https://adnangazi.github.io/"
+  },
   "license":"MIT",
   "main":"truffle-config.js",
   "directories":{
     "test":"test"
   },
   "scripts":{
-    "dev":"lite-server"
+    "start": "lite-server"
   },
   "devDependencies":{
     "truffle":"5.5.18",
