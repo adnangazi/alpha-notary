@@ -14,7 +14,6 @@
     "start": "lite-server"
   },
   "dependencies":{
-	"lite-server": "^2.3.0",
     "truffle":"5.5.18",
     "truffle-contract":"3.0.6",
     "web3":"0.20.6"
