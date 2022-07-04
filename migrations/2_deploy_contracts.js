@@ -1,4 +1,4 @@
-var Notarization = artifacts.require("./Notarization.sol");
+var Notarization = artifacts.require("Notarization.sol");
 
 /**
 * deploy the Notarization Smart Contract

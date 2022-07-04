@@ -6,13 +6,10 @@
   "author": {
     "name": "Adnan Latif Gazi",
     "email": "adnangazi.ag@gmail.com",
-    "url": "https://adnangazi.github.io/"
+    "url": "https://adnangazi.github.io"
   },
   "license":"MIT",
   "main":"truffle-config.js",
-  "directories":{
-    "test":"test"
-  },
   "scripts":{
     "start": "lite-server"
   },
