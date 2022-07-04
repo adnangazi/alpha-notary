@@ -472,6 +472,20 @@ View = {
       await View.insertInteraction(i, ((length - i) % 3) * 50);
     }
   },
+
+  /**
+  * import wallet
+  */
+  importWallet: async () => {
+    await web3.eth.getBalance(Controller.account, function(error, result){ 
+      if (!error) {
+        const walletValue = parseInt(result, 10) / 10 ** 18;
+        document.getElementById('walletBase').innerHTML = walletValue + " Coin" + (walletValue != 1 && walletValue != 0 ? "s" : "");
+      } else {
+        View.bannerNotify(["Error getting wallet base: " + error + "!"], 0);
+      }
+    })
+  }
 }
 
 /**
@@ -521,17 +535,7 @@ Controller = {
       View.bannerNotify(["Error getting account ID: MetMask account is not connected!"], 0);
     }
 
-    /**
-    * import wallet
-    */
-    await web3.eth.getBalance(Controller.account, function(error, result){ 
-      if (!error) {
-        const walletValue = parseInt(result, 10) / 10 ** 18;
-        document.getElementById('walletBase').innerHTML = walletValue + " Coin" + (walletValue != 1 && walletValue != 0 ? "s" : "");
-      } else {
-        View.bannerNotify(["Error getting wallet base: " + error + "!"], 0);
-      }
-    })
+    View.importWallet();
 
     // importing Smart Contract
     var Notarization = TruffleContract(await $.getJSON('Notarization.json'));
@@ -578,8 +582,9 @@ Controller = {
             View.resetArea(View.uploadedAreas[0]);
             View.resetFile(0);
 
-            // inserting the current Interaction
+            // inserting the current Interaction and updating the wallet base
             if (Controller.contractDecisor) {
+              View.importWallet();
               View.insertInteraction(await Controller.notarization.getInteractionCount() - 1);
             }
           } else {
@@ -630,8 +635,9 @@ Controller = {
           View.resetArea(View.uploadedAreas[1]);
           View.resetFile(1);
 
-          // inserting the current Interaction
+          // inserting the current Interaction and updating the wallet base
           if (Controller.contractDecisor) {
+            View.importWallet();
             View.insertInteraction(await Controller.notarization.getInteractionCount() - 1);
           }
         })
@@ -675,8 +681,9 @@ Controller = {
           View.resetArea(View.uploadedAreas[2]);
           View.resetFile(2);
 
-          // inserting the current Interaction
+          // inserting the current Interaction and updating the wallet base
           if (Controller.contractDecisor) {
+            View.importWallet();
             View.insertInteraction(await Controller.notarization.getInteractionCount() - 1);
           }
         })
