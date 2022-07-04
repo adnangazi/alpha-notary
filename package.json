@@ -1,21 +1,29 @@
 {
-  "name":"alpha-notary",
-  "version":"1.0.0",
-  "description":"Blockchain Notarization dApp",
-  "keywords": ["Blockchain", "Notarization", "DApp", "Ethereum", "NFTs"],
+  "name": "alpha-notary",
+  "version": "1.0.0",
+  "description": "Blockchain Notarization dApp",
+  "keywords": [
+    "Blockchain",
+    "Notarization",
+    "DApp",
+    "Ethereum",
+    "NFTs"
+  ],
   "author": {
     "name": "Adnan Latif Gazi",
     "email": "adnangazi.ag@gmail.com",
     "url": "https://adnangazi.github.io"
   },
-  "license":"MIT",
-  "main":"truffle-config.js",
-  "scripts":{
+  "license": "MIT",
+  "main": "truffle-config.js",
+  "scripts": {
     "start": "lite-server"
   },
-  "dependencies":{
-    "truffle":"5.5.18",
-    "truffle-contract":"3.0.6",
-    "web3":"0.20.6"
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^2.0.10",
+    "lite-server": "^2.6.1",
+    "truffle": "^5.5.18",
+    "truffle-contract": "^3.0.6",
+    "web3": "^0.20.6"
   }
 }
