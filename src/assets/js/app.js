@@ -441,7 +441,7 @@ View = {
     var element = document.getElementById("emptyMessage");
 
     if (await Controller.notarization.getInteractionCount() == 0) {
-      element.innerHTML = '<span data-aos="fade-up" data-aos-delay="350"><b>No interactions done yet! Start notaring now and monitor your transactions to watch them here!</b></span>';
+      element.innerHTML = '<div data-aos="fade-up" data-aos-delay="350"><span><b>No interactions done yet! Start notaring now and monitor your transactions to watch them here!</b></span></div>';
     } else if (element.innerHTML != "") {
       element.innerHTML = "";
     }
