@@ -22,6 +22,10 @@ module.exports = {
       provider: () => new HDWalletProvider(mnemonic, `https://aurora-mainnet.infura.io/v3/${infuraKey}`),
       network_id: 1313161554
     },
+    near: {
+      provider: () => new HDWalletProvider(mnemonic, `https://near-mainnet.infura.io/v3/${infuraKey}`),
+      network_id: 1313161554
+    },
     development: {
       host: "127.0.0.1",
       port: 8545,
@@ -53,6 +57,10 @@ module.exports = {
     },
     auroratestnet: {
       provider: () => new HDWalletProvider(mnemonic, `https://aurora-testnet.infura.io/v3/${infuraKey}`),
+      network_id: 1313161555
+    },
+    neartestnet: {
+      provider: () => new HDWalletProvider(mnemonic, `https://near-testnet.infura.io/v3/${infuraKey}`),
       network_id: 1313161555
     }
   },
