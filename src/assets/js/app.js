@@ -306,7 +306,7 @@ View = {
   * switch the lite mode
   */
   liteModeSwitcher: async () => {
-    View.otherValues[1].title = Controller.contractDecisor ? 'Lite-mode off' : 'Lite-mode on';
+    View.otherValues[1].title = Controller.contractDecisor ? 'Lite mode off' : 'Lite mode on';
   },
 
   /**
@@ -321,7 +321,7 @@ View = {
     var deley = deleyer + amount;
 
     // paragraph title
-    containerLines.innerHTML = '<p data-aos="fade-up" data-aos-delay="' + deley + '"><b>' + toNotify[0] + '</b></p>';
+    containerLines.innerHTML = '<p data-aos="fade-up" data-aos-delay="' + deley + '"><b>' + toNotify[0] + '!</b></p>';
     deley += amount;
 
     // inserting like in JSON format
@@ -482,7 +482,7 @@ View = {
         const walletValue = parseInt(result, 10) / 10 ** 18;
         document.getElementById('walletBase').innerHTML = walletValue + " Coin" + (walletValue != 1 && walletValue != 0 ? "s" : "");
       } else {
-        View.bannerNotify(["Error getting wallet base: " + error + "!"], 0);
+        View.bannerNotify(["Error getting wallet base: " + error], 0);
       }
     })
   }
@@ -505,7 +505,7 @@ Controller = {
       Controller.web3Provider = web3.currentProvider;
       web3 = new Web3(web3.currentProvider);
     } else {
-      View.bannerNotify(["Please connect to Metamask!"], 0);
+      View.bannerNotify(["Please connect to Metamask"], 0);
     }
     
     // importing Web3
@@ -523,7 +523,7 @@ Controller = {
       window.web3 = new Web3(web3.currentProvider);
       web3.eth.sendTransaction({/* ... */ });
     } else {
-      View.bannerNotify(["Non-Ethereum browser detected. You should consider trying MetaMask!"], 0);
+      View.bannerNotify(["Non-Ethereum browser detected. You should consider trying MetaMask"], 0);
     }
 
     // importing account
@@ -532,7 +532,7 @@ Controller = {
     if (Controller.account != undefined) {
       document.getElementById('account').innerHTML = Controller.account;
     } else {
-      View.bannerNotify(["Error getting account ID: MetMask account is not connected!"], 0);
+      View.bannerNotify(["Error getting account ID: MetMask account is not connected"], 0);
     }
 
     View.importWallet();
@@ -628,7 +628,7 @@ Controller = {
           var owner = String(await Controller.notarization.getCurrentDocumentOwner());
           
           // visualizing in the GUI the result
-          View.bannerNotify(["The document have " + (await Controller.notarization.getCheckResult() ? " " : "not ") + "been found!", "Name", await Controller.notarization.getCurrentDocumentName(), "Comments", await Controller.notarization.getCurrentDocumentComments(), "Hash", hash, "Date", (date != 0 ? Utils.epochConverter(date) : ""), "Owner", (owner != "0x0000000000000000000000000000000000000000" ? owner : ""), "Interaction date", Utils.epochConverter(await Controller.notarization.getCurrentInteractionDate()), "Interaction owner", await Controller.notarization.getCurrentInteractionOwner()], 2);
+          View.bannerNotify(["The document have " + (await Controller.notarization.getCheckResult() ? " " : "not ") + "been found", "Name", await Controller.notarization.getCurrentDocumentName(), "Comments", await Controller.notarization.getCurrentDocumentComments(), "Hash", hash, "Date", (date != 0 ? Utils.epochConverter(date) : ""), "Owner", (owner != "0x0000000000000000000000000000000000000000" ? owner : ""), "Interaction date", Utils.epochConverter(await Controller.notarization.getCurrentInteractionDate()), "Interaction owner", await Controller.notarization.getCurrentInteractionOwner()], 2);
           
           // resetting the uploading stuff
           View.resetArea(View.progressAreas[1]);
@@ -674,7 +674,7 @@ Controller = {
           var owner = String(await Controller.notarization.getCurrentDocumentOwner());
           
           // visualizing in the GUI the result
-          View.bannerNotify(["The document have " + (await Controller.notarization.getRemoveResult() ? " " : "not ") + "been removed!", "Name", await Controller.notarization.getCurrentDocumentName(), "Comments", await Controller.notarization.getCurrentDocumentComments(), "Hash", hash, "Date", (date != 0 ? Utils.epochConverter(date) : ""), "Owner", (owner != "0x0000000000000000000000000000000000000000" ? owner : ""), "Interaction date", Utils.epochConverter(await Controller.notarization.getCurrentInteractionDate()), "Interaction owner", await Controller.notarization.getCurrentInteractionOwner()], 3);
+          View.bannerNotify(["The document have " + (await Controller.notarization.getRemoveResult() ? " " : "not ") + "been removed", "Name", await Controller.notarization.getCurrentDocumentName(), "Comments", await Controller.notarization.getCurrentDocumentComments(), "Hash", hash, "Date", (date != 0 ? Utils.epochConverter(date) : ""), "Owner", (owner != "0x0000000000000000000000000000000000000000" ? owner : ""), "Interaction date", Utils.epochConverter(await Controller.notarization.getCurrentInteractionDate()), "Interaction owner", await Controller.notarization.getCurrentInteractionOwner()], 3);
           
           // resetting the uploading stuff
           View.resetArea(View.progressAreas[2]);
