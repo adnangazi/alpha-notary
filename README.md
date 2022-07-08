@@ -3,6 +3,8 @@
 # AlphaNotary
 AlphaNotary is a Blockchain Notarization DApp to manage NFTs uniquely yours, creating, notaring, and monitoring your documents! Notarization is solid, practical, and safe thanks to AlphaNotary! Start right now and enjoy a completely new era of NFTs!
 
+AlphaNotary is an internship project for the curricular stage at the end of the Bachelor of the University of Padua.
+
 ## Appendix
 - Screenshots
 - Features
@@ -14,7 +16,7 @@ AlphaNotary is a Blockchain Notarization DApp to manage NFTs uniquely yours, cre
 - Run Locally
 - Demo
 - Deployment
-- Optimizations
+- Next improvements
 - Authors
 - License
 - Support
@@ -32,14 +34,14 @@ AlphaNotary is a Blockchain Notarization DApp to manage NFTs uniquely yours, cre
 - Full mode
 - Light mode
 - Dark mode
-- Upload
-- Check
-- Remove
-- Monitor
+- Upload NFTs
+- Check NFTs
+- Remove NFTs
+- Monitor NFTs
 
 ## Tech Stack
-**Languages:** Batch, Bootstrap, CSS, HTML, JavaScript, Node.js, Solidity, Web3.js
-**Technologies:** Blockchain, Ethereum, Ganache, Infure, IPFS, Lite-server, MetaMask, Polygon, Truffle Suite
+**Languages:** HTML, CSS, JavaScript, Node.js, Solidity, Bootstrap, Web3.js
+**Technologies:** Git, Truffle Suite, Infura, MetaMask, Windows, and Linux
 
 ## Documentation
 [Documentation](https://github.com/adnangazi/alpha-notary/tree/main/documentation)
@@ -88,7 +90,7 @@ truffle migrate --network <your_network>
 ![Logo](https://raw.githubusercontent.com/adnangazi/alpha-notary/main/src/assets/img/screen/Monitor.png)
 
 ## Next improvements
-- Express version of the app
+- Express version of the application
 - Front-end famework (Angular) introduction 
 - Deployment in a server
 - Automate transactions
