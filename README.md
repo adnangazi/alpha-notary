@@ -1,7 +1,7 @@
 ![Logo](https://raw.githubusercontent.com/adnangazi/alpha-notary/main/src/assets/img/icon/alpha-3.ico)
 
 # AlphaNotary
-AlphaNotary is a Blockchain Notarization DApp to manage NFTs uniquely yours, creating, notaring, and monitoring your documents! Notarization is solid, practical, and safe thanks to AlphaNotary! Start right now and enjoy a completely new era of NFTs!
+AlphaNotary is a Blockchain notarization and monitoring dApp to manage NFTs uniquely yours, creating, notaring, and monitoring your documents! Notarization and monitoring are solid, practical, and safe thanks to AlphaNotary! Start right now and enjoy a completely new era of NFTs!
 
 AlphaNotary is an internship project for the curricular stage at the end of the Bachelor of the University of Padua.
 
@@ -119,7 +119,7 @@ Lite mode switches to a lighter Smart Contract, which avoids monitoring your tra
 Full mode is the default one and it switches to a heavier Smart Contract, which monitors your transactions so you can see your actions log for tracking and controlling the correctness of your authentication process work flow.
 
 #### How do I now my documents are not exposed?
-Your documents are safe because AlphaNotary doesn't save or conserve them. On your device and only there your documents are taken, immediately calculated the hash code and right then removed. The only exposed contents are the hash codes, but they are encrypted several times during the notarization process, and, to make matters worse, hash codes don't permit to recreate the original document from them.
+Your documents are safe because AlphaNotary doesn't save or conserve them. On your device and only there your documents are taken, immediately calculated the hash code and right then removed. The only exposed contents are the hash codes, but they are encrypted several times during the notarization and monitoring processes, and, to make matters worse, hash codes don't permit to recreate the original document from them.
 
 #### How do I start Using AlphaNotary?
 All you need to start notaring is having the MetaMask extension on your browser: install it from the extension marketplace of the browser, and then create your account there. You will also need to configure the network you want to use, and finally charge you wallet with come coins. Also check to have a browser that supports These technologies.

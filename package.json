@@ -1,10 +1,12 @@
 {
   "name": "alpha-notary",
   "version": "1.0.0",
-  "description": "Blockchain Notarization dApp",
+  "description": "AlphaNotary: NFTs' Notarization And Monitoring DApp Through Ethereum Compatible Blockchains",
   "keywords": [
+    "AlphaNotary",
     "Blockchain",
     "Notarization",
+    "Monitoring",
     "DApp",
     "Ethereum",
     "NFTs"
