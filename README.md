@@ -41,6 +41,7 @@ AlphaNotary is an internship project for the curricular stage at the end of the 
 
 ## Tech Stack
 **Languages:** HTML, CSS, JavaScript, Node.js, Solidity, Bootstrap, Web3.js
+
 **Technologies:** Git, Truffle Suite, Infura, MetaMask, Windows, and Linux
 
 ## Documentation
