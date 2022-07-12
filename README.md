@@ -62,13 +62,15 @@ You will first need to have these followings in your computer:
 - Truffle Suite
 - Node.js
 
-## Running Tests
+## Run Tests
 Open the project with a terminal and run this command:
 ```bash
 truffle test
 ```
 You will first need to have these followings in your computer:
 - Ganache
+
+Note: running tests are not compulsory
 
 ## Run Locally
 Open the project with a terminal and run this command:
@@ -79,11 +81,14 @@ npm start
 You will first need to have these followings in your computer:
 - Ganache
 
+Note: running locally is not compulsory
+
 ## Deployment
 Run as in local without migrating, and only use this command after noticing the system is not working:
 ```bash
 truffle migrate --network <your_network>
 ```
+Note: you can also reach the system by clicking [here](https://alpha-notary.vercel.app/src/index.html), but due to a port configuration problem, it only visualizes the GUI
 
 ## Demo
 ![Logo](https://raw.githubusercontent.com/adnangazi/alpha-notary/main/src/assets/img/screen/Wallet.png)
