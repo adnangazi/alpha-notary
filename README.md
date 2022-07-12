@@ -119,7 +119,7 @@ If you want to support us, please reach out to us at the following links:
 
 ## FAQ
 #### What is Lite mode?
-Lite mode switches to a lighter Smart Contract, which avoids monitoring your transactions: all the prime functionalities are mantained, just you can't see your actions log for more operational speed and less transactions costs.
+Lite mode switches to a lighter Smart Contract, which avoids monitoring your transactions: all the prime functionalities are maintained, just you can't see your actions log for more operational speed and less transactions costs.
 
 #### What is Full mode?
 Full mode is the default one and it switches to a heavier Smart Contract, which monitors your transactions so you can see your actions log for tracking and controlling the correctness of your authentication process work flow.
