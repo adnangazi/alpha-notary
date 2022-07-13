@@ -19,9 +19,8 @@ AlphaNotary is an internship project for the curricular stage at the end of the 
 - Next improvements
 - Authors
 - License
-- Support
 - FAQ
-- Feedback
+- Feedback & Support
 - Contributing
 
 ## Screenshots
@@ -88,7 +87,7 @@ Run as in local without migrating, and only use this command after noticing the 
 ```bash
 truffle migrate --network <your_network>
 ```
-Note: you can also reach the system by clicking [here](https://alpha-notary.vercel.app/src/index.html), but due to a port configuration problem, it only visualizes the GUI
+Note: you can also reach the system by clicking [here](https://alpha-notary.vercel.app/src/index.html), but due to a port configuration problem, it only visualizes the GUI. You can also open directly di batch file "app" or its shortcut "AlphaNotary", instead. You can move the shortcut where you want.
 
 ## Demo
 ![Logo](https://raw.githubusercontent.com/adnangazi/alpha-notary/main/src/assets/img/screen/Wallet.png)
@@ -108,14 +107,6 @@ Note: you can also reach the system by clicking [here](https://alpha-notary.verc
 
 ## License
 [MIT](https://github.com/adnangazi/alpha-notary/blob/main/LICENSE)
-
-## Support
-If you want to support us, please reach out to us at the following links:
-- [Email](mailto:adnangazi.ag@gmail.com)
-- [Telegram](https://t.me/iamadnangazi)
-- [LinkedIn](https://www.linkedin.com/in/adnanlatifgazi)
-- [Instagram](https://www.instagram.com/iamadnangazi)
-- [Facebook](https://www.facebook.com/people/Adnan-Latif-Gazi/100006788295938)
 
 ## FAQ
 #### What is Lite mode?
@@ -142,8 +133,8 @@ It is pretty understandable if you don't want to start using AlphaNotary. We alw
 
 Not having a server makes AlphaNotary resilient to common errors, so the system should always work. But if you receive an error, just try to refresh the website, and MetaMask furthermore. Also try to check the many error log that the system prints to see what's going wrong. Try to control your network state and the operation that your were trying to do are even further steps. Last, feel free to contact us if none of this solutions works: we will be happy to help you!
 
-## Feedback
-If you have any feedback, please reach out to us at the following links:
+## Feedback & Support
+If you have any feedback, or want to support us, we would be very glad and you can please reach out to us at the following links:
 - [Email](mailto:adnangazi.ag@gmail.com)
 - [Telegram](https://t.me/iamadnangazi)
 - [LinkedIn](https://www.linkedin.com/in/adnanlatifgazi)
