@@ -69,7 +69,7 @@ truffle test
 You will first need to have these followings in your computer:
 - Ganache
 
-Note: running tests are not compulsory
+Note: running tests is not compulsory
 
 ## Run Locally
 Open the project with a terminal and run this command:
