@@ -106,7 +106,7 @@ Note: you can also reach the system by clicking [here](https://alpha-notary.verc
 - [@adnangazi](https://github.com/adnangazi)
 
 ## License
-[MIT](https://github.com/adnangazi/alpha-notary/blob/main/LICENSE)
+- [MIT](https://github.com/adnangazi/alpha-notary/blob/main/LICENSE)
 
 ## FAQ
 #### What is Lite mode?
