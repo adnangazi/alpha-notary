@@ -6,22 +6,22 @@ AlphaNotary is a Blockchain notarization and monitoring dApp to manage NFTs uniq
 AlphaNotary is an internship project for the curricular stage at the end of the Bachelor of the University of Padua.
 
 ## Appendix
-- Screenshots
-- Features
-- Tech Stack
-- Documentation
-- Used By
-- Installation
-- Running Tests
-- Run Locally
-- Demo
-- Deployment
-- Next improvements
-- Authors
-- License
-- FAQ
-- Feedback & Support
-- Contributing
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Documentation](#documentation)
+- [Used By](#used-by)
+- [Installation](#installation)
+- [Run Tests](#run-tests)
+- [Run Locally](#run-locally)
+- [Demo](#demo)
+- [Deployment](#deployment)
+- [Next improvements](#next-improvements)
+- [Authors](#authors)
+- [License](#license)
+- [FAQ](#faq)
+- [Feedback & Support](#feedback--support)
+- [Contributing](#contributing)
 
 ## Screenshots
 ![Logo](https://raw.githubusercontent.com/adnangazi/alpha-notary/main/src/assets/img/screen/AlphaNotary.png)
@@ -143,3 +143,5 @@ If you have any feedback, or want to support us, we would be very glad and you c
 
 ## Contributing
 Very glad to see you here, it means you really liked our product. AlphaNotary is completely free and open source, so just go to the repository, study its documentation and pull a request to contribute, we will be very to collaborate! You can also refer us if you prefer.
+
+[Back to top](#)
