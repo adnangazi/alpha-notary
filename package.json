@@ -19,6 +19,7 @@
   "license": "MIT",
   "main": "truffle-config.js",
   "scripts": {
+    "build": "lite-server",
     "dev": "lite-server",
     "start": "lite-server"
   },
