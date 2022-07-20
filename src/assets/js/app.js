@@ -29,7 +29,7 @@ Utils = {
   * @param files list of files
   * @return string of the hash code
   */
-  createHash: function (files) {
+  createHash(files) {
     /**
     * correct the format of the hash code and convert to hex
     * 
@@ -557,7 +557,7 @@ Controller = {
     var correctFormatName = majorName != -1 && minorName != -1 ? majorName < minorName : true;
 
     if (View.files[0].length > 0 && !emptyName && correctFormatName) {
-      await Utils.createHash(View.files[0])
+      Utils.createHash(View.files[0])
         /**
         * upload in the Blockchain a file
         * 
@@ -614,7 +614,7 @@ Controller = {
   checkDocument: async () => {
     // checking the correct format of the values for the operation
     if (View.files[1].length > 0) {
-      await Utils.createHash(View.files[1])
+      Utils.createHash(View.files[1])
         /**
         * check in the Blockchain a file
         * 
@@ -660,7 +660,7 @@ Controller = {
   removeDocument: async () => {
     // checking the correct format of the values for the operation
     if (View.files[2].length > 0) {
-      await Utils.createHash(View.files[2])
+      Utils.createHash(View.files[2])
         /**
         * remove in the Blockchain a file
         * 
